@@ -1,20 +1,35 @@
+/* eslint-disable prettier/prettier */
 <template>
   <div class="nav-wrapper">
-    <router-link :key="index" v-for="(route, index) in routes" :to="route.path">
+    <router-link
+      :key="index"
+      v-for="(route, index) in routeList"
+      :to="route.path"
+    >
       {{ route.name }}
     </router-link>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator'
+import {
+  Component,
+  Prop,
+  Vue
+} from 'vue-property-decorator'
 import { routes } from '../router'
+import { RouteConfig } from 'vue-router'
 @Component
 export default class Navigator extends Vue {
   data() {
-    return {
-      routes
-    }
+    return {}
+  }
+  @Prop()
+  private routes!: Array<RouteConfig>
+
+  get routeList(): Array<RouteConfig> {
+    const result = this.routes || routes
+    return result
   }
 }
 </script>
