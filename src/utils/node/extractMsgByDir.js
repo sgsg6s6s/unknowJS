@@ -1,19 +1,22 @@
 const fs = require('fs')
 const { join } = require('path')
-
-export function extractConfig(dirPath: string) {
+function readFileInPath(dirPath) {
   const jsonFiles = []
-  function findJsonFile(path: string) {
+  ;(function searchFiles(path) {
     const files = fs.readdirSync(path)
-    files.forEach(function(item: string, index: number) {
+    files.forEach(function(item, index) {
       const fPath = join(path, item)
       const stat = fs.statSync(fPath)
       if (stat.isDirectory() === true) {
-        findJsonFile(fPath)
+        searchFiles(fPath)
       }
       if (stat.isFile() === true) {
         jsonFiles.push(fPath)
       }
     })
-  }
+  })(dirPath)
+  return jsonFiles
+}
+module.exports = {
+  readFileInPath
 }

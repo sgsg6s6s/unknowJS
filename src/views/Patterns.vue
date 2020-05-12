@@ -18,23 +18,17 @@ export default class Patterns extends Vue {
   childrenRoutes: Array<Route> = []
 
   mounted() {
-    const nodes: Array<Route> = (this.$router as any)
-      .options.routes
+    const nodes: Array<Route> = (this.$router as any).options.routes
     const { path } = this.$route
     const splits = path.match(/\/\w+/g)
     const currentBigPath = splits ? splits[0] : ''
-    const curentNode = nodes.find(
-      (e: Route) => e.path == currentBigPath
-    )
-    let children = curentNode
-      ? (curentNode as any).children
-      : []
+    const curentNode = nodes.find((e: Route) => e.path == currentBigPath)
+    let children = curentNode ? (curentNode as any).children : []
     children = children.map((e: Route) => {
       const copy: Route = { ...e }
       copy.path = currentBigPath + '/' + copy.path
       return copy
     })
-    console.info('childrenRoutes', children)
     this.childrenRoutes = children
   }
 }

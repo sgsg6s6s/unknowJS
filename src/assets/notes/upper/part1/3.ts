@@ -26,80 +26,86 @@ export const config: { [key: string]: string[][] } = {
   ]
 }
 
-a = 2
-;(function foo(obj) {
-  var a = 8
-  console.log(a)
-})()
+export function handler() {
+  try {
+    a = 2
+    ;(function foo(obj) {
+      var a = 8
+      console.log(a)
+    })()
 
-console.log(a)
-;(function() {
-  console.info(1)
-})()
-;(function() {
-  console.info(1)
-})() // 被格式化了
-console.info('begin for')
-for (var i = 0; i < 10; i++) {
-  console.info(i)
-}
-console.info('out for', i)
-try {
-  function f1() {
-    var level1 = 1
-    function f2() {
-      var level2 = 2
-      function f3() {
-        var level3 = 3
-        console.info('level1', level1, 'level2', level2, 'level3', level3)
+    console.log(a)
+    ;(function() {
+      console.info(1)
+    })()
+    ;(function() {
+      console.info(1)
+    })() // 被格式化了
+    console.info('begin for')
+    for (var i = 0; i < 10; i++) {
+      console.info(i)
+    }
+    console.info('out for', i)
+    try {
+      function f1() {
+        var level1 = 1
+        function f2() {
+          var level2 = 2
+          function f3() {
+            var level3 = 3
+            console.info('level1', level1, 'level2', level2, 'level3', level3)
+          }
+          console.info('f2()', level2)
+          f3()
+        }
+        console.info('f1()', level1, level2, level3)
+        f2()
       }
-      console.info('f2()', level2)
-      f3()
+      f1()
+    } catch (err) {
+      console.info('err', err)
     }
-    console.info('f1()', level1, level2, level3)
-    f2()
-  }
-  f1()
-} catch (err) {
-  console.info('err', err)
-}
-try {
-  for (var i = 0; i < 3; i++) {
-    for (var j = 0; j < 3; j++) {
-      for (let k = 0; k < 3; k++) {}
+    try {
+      for (var i = 0; i < 3; i++) {
+        for (var j = 0; j < 3; j++) {
+          for (let k = 0; k < 3; k++) {}
+        }
+      }
+      console.info('i', i, 'j', j, 'k', k)
+    } catch (error) {
+      console.info('error', error)
     }
-  }
-  console.info('i', i, 'j', j, 'k', k)
-} catch (error) {
-  console.info('error', error)
-}
-try {
-  try {
-    {
-      console.log(bar)
-      var bar = 2
+    try {
+      try {
+        {
+          console.log(bar)
+          var bar = 2
+        }
+        {
+          console.log(bar)
+          let bar = 2
+        }
+      } catch (error) {
+        console.info('error', error)
+      }
+    } catch (error) {
+      console.info('error', error)
     }
-    {
-      console.log(bar)
-      let bar = 2
-    }
-  } catch (error) {
-    console.info('error', error)
-  }
-} catch (error) {
-  console.info('error', error)
-}
 
-// 显示作用域方式
-// let (a=8){
-//   console.info(a)
-// }
-{
-  try {
-    throw undefined
+    // 显示作用域方式
+    // let (a=8){
+    //   console.info(a)
+    // }
+    {
+      try {
+        throw undefined
+      } catch (e) {
+        e = 2
+        console.info(e)
+      }
+      // console.info(e)
+    }
   } catch (e) {
-    e = 2
-    console.info(e)
+    console.warn(e)
   }
-  // console.info(e)
 }

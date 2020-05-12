@@ -9,31 +9,27 @@ export const routes: Array<RouteConfig> = [
     path: '/unknowJS',
     alias: '/',
     name: 'Unknow JS',
-    component: () =>
-      import(
-        /* webpackChunkName: "unknowJS" */ '../views/UnknowJS.vue'
-      )
+    component: () => import(/* webpackChunkName: "unknowJS" */ '../views/UnknowJS.vue')
   },
   {
     path: '/api',
     name: 'JS Object API',
-    component: () =>
-      import(
-        /* webpackChunkName: "unknowJS" */ '../views/API.vue'
-      )
+    component: () => import(/* webpackChunkName: "unknowJS" */ '../views/API.vue')
   },
   {
     path: '/question',
     name: 'Question',
-    component: () =>
-      import(
-        /* webpackChunkName: "unknowJS" */ '../views/Question.vue'
-      )
+    component: () => import(/* webpackChunkName: "unknowJS" */ '../views/Question.vue')
   },
   {
     path: '/vueLinks',
     name: 'Vue links',
     component: Home
+  },
+  {
+    path: '/axios',
+    name: 'axios',
+    component: () => import(/* webpackChunkName: "axios" */ '../views/Axios.vue')
   },
   {
     path: '/designPatterns',
@@ -42,10 +38,7 @@ export const routes: Array<RouteConfig> = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     // component: Patterns,
-    component: () =>
-      import(
-        /* webpackChunkName: "designPatterns" */ '../views/Patterns.vue'
-      ),
+    component: () => import(/* webpackChunkName: "designPatterns" */ '../views/Patterns.vue'),
     children: [
       {
         path: 'iterator',
@@ -60,9 +53,7 @@ export const routes: Array<RouteConfig> = [
         path: 'proxy',
         name: 'Proxy Pattern',
         component: () =>
-          import(
-            /* webpackChunkName: "designPatterns" */ '../components/designParttens/Proxy.vue'
-          )
+          import(/* webpackChunkName: "designPatterns" */ '../components/designParttens/Proxy.vue')
       },
       {
         path: 'observe',

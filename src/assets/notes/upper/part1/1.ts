@@ -6,10 +6,7 @@
 export const config: { [key: string]: string[][] } = {
   作用域: [
     ['h1', 'JavaScript特点'],
-    [
-      'p',
-      'JS是编译型语言，编译过程是在代码执行前很短的时间（一般几微妙，甚至更快）内发生的'
-    ],
+    ['p', 'JS是编译型语言，编译过程是在代码执行前很短的时间（一般几微妙，甚至更快）内发生的'],
     ['p', 'JS使用词法作用域，非动态作用域'],
     ['h1', '分词(Tokenizing)/词法分析(Lexing)'],
     ['p', 'var a = 2'],
@@ -24,4 +21,12 @@ export const config: { [key: string]: string[][] } = {
     ],
     ['p', 'RHS（谁是赋值操作的源头），RHS失败导致ReferenceError']
   ]
+}
+
+export function handler() {
+  try {
+    console.info('1.ts')
+  } catch (e) {
+    console.warn(e)
+  }
 }

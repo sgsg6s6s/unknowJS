@@ -13,10 +13,7 @@ export const config: { [key: string]: string[][] } = {
     ],
     ['h1', '绑定规则'],
     ['p', '1. 默认绑定，调用独立函数，需要猜测谁调用了函数，一般是window'],
-    [
-      'p',
-      '2. 隐式绑定，this替代的是最后一级调用方法的对象,例如`a.b.func()`，this指代b'
-    ],
+    ['p', '2. 隐式绑定，this替代的是最后一级调用方法的对象,例如`a.b.func()`，this指代b'],
     ['p', '3. 显示绑定(call、apply或者bind)'],
     ['p', '4. new绑定'],
     ['h1', '绑定优先级'],
@@ -44,149 +41,144 @@ export const config: { [key: string]: string[][] } = {
   ]
 }
 
-window.a = 'window-a'
-{
-  function foo() {
-    let a = 'a'
+export function handler() {
+  try {
+    window.a = 'window-a'
+    {
+      function foo() {
+        let a = 'a'
 
-    let bar = function() {
-      console.info('example1 bar print a:', this.a)
-    }
+        let bar = function() {
+          console.info('example1 bar print a:', this.a)
+        }
 
-    foo.a = 'foo-a'
-    foo.bar = bar
+        foo.a = 'foo-a'
+        foo.bar = bar
 
-    bar() // 默认绑定
-    foo.bar() // 隐式绑定
+        bar() // 默认绑定
+        foo.bar() // 隐式绑定
 
-    // 显示绑定
-    let callReturn = bar.call(foo)
-    let applyReturn = bar.apply(foo)
-    console.info('call or apply return:', callReturn, applyReturn)
-    let bindFoo = bar.bind(foo)
-    bindFoo() // 硬绑定
-    console.info(
-      'example1 bar is:',
-      bar,
-      bar.prototype,
-      typeof bar,
-      bar instanceof Function
-    )
-    console.info(
-      'example1 bind Foo is:',
-      bindFoo,
-      bindFoo.prototype,
-      typeof bindFoo,
-      bindFoo instanceof Function
-    )
-    let fooObj = new bindFoo()
-    console.info(
-      'example1 new bind Foo is:',
-      fooObj,
-      typeof fooObj,
-      fooObj instanceof Function,
-      fooObj instanceof Object
-    )
-    let obj = new Object()
-    console.info(
-      'example1 new Object is:',
-      obj,
-      typeof obj,
-      obj instanceof Object
-    )
-  }
-  foo()
-}
-{
-  function foo() {
-    console.info('example2 a is:', this.a)
-  }
-  let obj = {
-    a: 2,
-    foo
-  }
-  let bar = obj.foo
-  obj.foo() // 隐式调用
-  bar() // 因为引用方式调用，变成默认调用
-}
-
-{
-  function foo(sth) {
-    this.a = sth
-  }
-  let obj = {
-    foo
-  }
-  let obj2 = {}
-  obj.foo(2)
-  console.info('example3 a is:', obj.a)
-
-  obj.foo.call(obj2, 3)
-  console.info('example3 a is:', obj2.a)
-
-  let bar = new obj.foo(4)
-  console.info('example3 a is:', obj.a)
-  console.info('example3 a is:', bar.a)
-}
-
-{
-  Function.prototype.myBind = function(othis) {
-    if (!this instanceof Function) {
-      throw new TypeError('invoker is wrong')
-    }
-    let args = Array.prototype.slice.call(arguments, 1),
-      invoker = this,
-      tmpFunc = function() {},
-      builder = function() {
-        return invoker.apply(
-          this instanceof tmpFunc && othis ? this : othis,
-          args.concat(Array.prototype.slice.call(arguments, 0))
+        // 显示绑定
+        let callReturn = bar.call(foo)
+        let applyReturn = bar.apply(foo)
+        console.info('call or apply return:', callReturn, applyReturn)
+        let bindFoo = bar.bind(foo)
+        bindFoo() // 硬绑定
+        console.info('example1 bar is:', bar, bar.prototype, typeof bar, bar instanceof Function)
+        console.info(
+          'example1 bind Foo is:',
+          bindFoo,
+          bindFoo.prototype,
+          typeof bindFoo,
+          bindFoo instanceof Function
         )
-      }
-    tmpFunc.prototype = this.prototype
-    builder.prototype = new tmpFunc()
-    console.info('builder', builder)
-    return builder
-  }
-
-  Function.prototype.softBind = function(_this) {
-    if (!this instanceof Function) {
-      throw new TypeError('invoker of softBind is wrong ')
-    }
-    let commonArgs = [].prototype.slice.call(arguments, 1),
-      invoker = this,
-      builder = function() {
-        return invoker.apply(
-          !this || this === (window || global) ? _this : this,
-          commonArgs.concat.apply(commonArgs, arguments)
+        let fooObj = new bindFoo()
+        console.info(
+          'example1 new bind Foo is:',
+          fooObj,
+          typeof fooObj,
+          fooObj instanceof Function,
+          fooObj instanceof Object
         )
+        let obj = new Object()
+        console.info('example1 new Object is:', obj, typeof obj, obj instanceof Object)
       }
-    builder.prototype = Object.create(invoker.prototype)
-    console.info('builder', builder)
-    return builder
-  }
-
-  let func = function(a, b) {
-    console.info(a, b)
-  }
-  let bindFunc = func.myBind({})
-  let bindNullFunc = func.myBind(null)
-  let newBindFunc = new bindFunc()
-  let newBindNullFunc = new bindNullFunc()
-}
-
-{
-  var user = {
-    id: '1',
-    name: 'shig',
-    info: function toString() {
-      console.info(`id:${this.id},name:${this.name}`)
+      foo()
     }
+    {
+      function foo() {
+        console.info('example2 a is:', this.a)
+      }
+      let obj = {
+        a: 2,
+        foo
+      }
+      let bar = obj.foo
+      obj.foo() // 隐式调用
+      bar() // 因为引用方式调用，变成默认调用
+    }
+
+    {
+      function foo(sth) {
+        this.a = sth
+      }
+      let obj = {
+        foo
+      }
+      let obj2 = {}
+      obj.foo(2)
+      console.info('example3 a is:', obj.a)
+
+      obj.foo.call(obj2, 3)
+      console.info('example3 a is:', obj2.a)
+
+      let bar = new obj.foo(4)
+      console.info('example3 a is:', obj.a)
+      console.info('example3 a is:', bar.a)
+    }
+
+    {
+      Function.prototype.myBind = function(othis) {
+        if (!this instanceof Function) {
+          throw new TypeError('invoker is wrong')
+        }
+        let args = Array.prototype.slice.call(arguments, 1),
+          invoker = this,
+          tmpFunc = function() {},
+          builder = function() {
+            return invoker.apply(
+              this instanceof tmpFunc && othis ? this : othis,
+              args.concat(Array.prototype.slice.call(arguments, 0))
+            )
+          }
+        tmpFunc.prototype = this.prototype
+        builder.prototype = new tmpFunc()
+        console.info('builder', builder)
+        return builder
+      }
+
+      Function.prototype.softBind = function(_this) {
+        if (!this instanceof Function) {
+          throw new TypeError('invoker of softBind is wrong ')
+        }
+        let commonArgs = [].prototype.slice.call(arguments, 1),
+          invoker = this,
+          builder = function() {
+            return invoker.apply(
+              !this || this === (window || global) ? _this : this,
+              commonArgs.concat.apply(commonArgs, arguments)
+            )
+          }
+        builder.prototype = Object.create(invoker.prototype)
+        console.info('builder', builder)
+        return builder
+      }
+
+      let func = function(a, b) {
+        console.info(a, b)
+      }
+      let bindFunc = func.myBind({})
+      let bindNullFunc = func.myBind(null)
+      let newBindFunc = new bindFunc()
+      let newBindNullFunc = new bindNullFunc()
+    }
+
+    {
+      var user = {
+        id: '1',
+        name: 'shig',
+        info: function toString() {
+          console.info(`id:${this.id},name:${this.name}`)
+        }
+      }
+      user.info()
+      setTimeout(
+        // user.info, // 通过setTimeout执行info函数，丢失this
+        user.info.bind(user), // bind user作为this
+        100
+      )
+    }
+  } catch (e) {
+    console.warn(e)
   }
-  user.info()
-  setTimeout(
-    // user.info, // 通过setTimeout执行info函数，丢失this
-    user.info.bind(user), // bind user作为this
-    100
-  )
 }

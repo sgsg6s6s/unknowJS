@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 <template>
   <div class="nav-wrapper">
     <router-link
@@ -12,11 +11,7 @@
 </template>
 
 <script lang="ts">
-import {
-  Component,
-  Prop,
-  Vue
-} from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 import { routes } from '../router'
 import { RouteConfig } from 'vue-router'
 @Component

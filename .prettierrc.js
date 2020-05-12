@@ -1,10 +1,12 @@
 module.exports = {
-  printWidth: 60,
+  // eslintIntegration: false,
+  printWidth: 100,
   tabWidth: 2,
   useTabs: false,
   singleQuote: true,
   semi: false,
-  trailingComma: 'none',
+  trailingComma:
+    'none',
   bracketSpacing: true,
   jsxBracketSameLine: false
 }

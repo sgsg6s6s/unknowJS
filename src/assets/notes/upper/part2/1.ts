@@ -6,3 +6,10 @@
 export const config: { [key: string]: string[][] } = {
   关于this: [['h1', '关于this']]
 }
+
+export function handler() {
+  try {
+  } catch (e) {
+    console.warn(e)
+  }
+}

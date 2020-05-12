@@ -14,3 +14,15 @@ export const config: { [key: string]: string[][] } = {
     ['p', '2. 隐式混入']
   ]
 }
+
+try {
+} catch (e) {
+  console.warn(e)
+}
+
+export function handler() {
+  try {
+  } catch (e) {
+    console.warn(e)
+  }
+}

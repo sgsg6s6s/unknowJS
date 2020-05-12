@@ -1,6 +1,9 @@
 <template>
   <div class="selectors-container">
-    <el-select v-model="bookValue" placeholder="请选择卷">
+    <el-select
+      v-model="bookValue"
+      placeholder="请选择卷"
+    >
       <el-option
         v-for="(item, index) in books"
         :key="index"
@@ -8,7 +11,10 @@
         :value="index"
       ></el-option>
     </el-select>
-    <el-select v-model="partValue" placeholder="请选择部分">
+    <el-select
+      v-model="partValue"
+      placeholder="请选择部分"
+    >
       <el-option
         v-for="(item, index) in partOptions"
         :key="index"
@@ -16,7 +22,10 @@
         :value="index"
       ></el-option>
     </el-select>
-    <el-select v-model="chapterValue" placeholder="请选择章">
+    <el-select
+      v-model="chapterValue"
+      placeholder="请选择章"
+    >
       <el-option
         v-for="(item, index) in chapterOptions"
         :key="index"
@@ -54,14 +63,31 @@ export default class CatalogSelector extends Vue {
   @Watch('bookValue')
   bookValueChanged() {
     this.partValue = 0
-    this.chapterValue = 0
+    this.emptyChapterValue()
   }
 
-  @Watch('partValue', { immediate: true })
+  @Watch('partValue', {
+    immediate: true
+  })
   partValueChanged() {
-    this.chapterValue = 0
-    this.$emit('chapterNameChanged', this.chapterName)
-    // this.$parent.chapterName = this.chapterName
+    this.emptyChapterValue()
+  }
+
+  @Watch('chapterValue', {
+    immediate: true
+  })
+  chapterValueChanged() {
+    this.$emit(
+      'chapterChanged',
+      this.bookValue,
+      this.partValue,
+      this.chapterValue,
+      this.chapterName
+    )
+  }
+
+  emptyChapterValue() {
+    this.chapterValue = this.chapterOptions.length > 0 ? 0 : -1
   }
 
   appendChapterName(name: string, index: number) {

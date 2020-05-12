@@ -15,36 +15,42 @@ export const config: { [key: string]: string[][] } = {
   ]
 }
 
-// foo()
-// var foo
-// function foo(params) {
-//   console.info(1)
-// }
-// foo = function (params) {
-//   console.info(2)
-// }
-{
-  var a = true
-  {
-    var c = 'c'
-  }
-  if (a) {
-    var b = 3
-    function foo(params) {
-      console.info('a')
-    }
-  } else {
-    var c = 4
-    let d = 'd'
-    function foo(params) {
-      console.info('b')
-    }
-  }
+export function handler() {
   try {
-    foo()
+    // foo()
+    // var foo
+    // function foo(params) {
+    //   console.info(1)
+    // }
+    // foo = function (params) {
+    //   console.info(2)
+    // }
+    {
+      var a = true
+      {
+        var c = 'c'
+      }
+      if (a) {
+        var b = 3
+        function foo(params) {
+          console.info('a')
+        }
+      } else {
+        var c = 4
+        let d = 'd'
+        function foo(params) {
+          console.info('b')
+        }
+      }
+      try {
+        foo()
+        console.info(b, c, d)
+      } catch (error) {
+        console.info(error)
+      }
+    }
     console.info(b, c, d)
-  } catch (error) {
-    console.info(error)
+  } catch (e) {
+    console.warn(e)
   }
 }
-console.info(b, c, d)

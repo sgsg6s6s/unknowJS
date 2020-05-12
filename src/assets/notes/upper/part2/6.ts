@@ -4,5 +4,15 @@
 // 第二部分: ['关于this', 'this全面解析', '对象', '混合对象类', '原型', '行为委托'],
 
 export const config: { [key: string]: string[][] } = {
-  行为委托: [['h1', '行为委托']]
+  行为委托: [
+    ['h1', '行为委托'],
+    ['p', '行为委托和面向类的设计不同，更直观的使用prototype,更好的利用了JS的特性']
+  ]
+}
+
+export function handler() {
+  try {
+  } catch (e) {
+    console.warn(e)
+  }
 }
