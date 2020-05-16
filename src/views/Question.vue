@@ -1,5 +1,8 @@
 <template>
   <div class="question-wrapper">
+    <BeforeRouteUpdate />
+    <router-link to="/question/1">question1</router-link>
+    <router-link to="/question/2">question2</router-link>
     <h1>前端常见的攻击以及防御</h1>
     <p>
       1、XSS(Cross Site Scripting) 跨站脚本攻击<br />
@@ -23,7 +26,8 @@
   </div>
 </template>
 
-<script>
+<script >
+
 // @ts-nocheck
 /* eslint-disable */
 const arr = [1, 2, [3, 4], [[5, 6], 7]]
@@ -139,5 +143,42 @@ function convert2Tree() {
 }
 
 console.info(convert2Tree())
-export default {}
+import Navigator from '@/components/Navigator.vue'
+import BeforeRouteUpdate from '@/components/route/beforeRouteUpdate.vue'
+import RouteVue from '@/components/mixins/RouteVue.vue'
+export default {
+  mixins: [RouteVue],
+  components: {
+    BeforeRouteUpdate
+  },
+  data() {
+    return {
+    }
+  },
+  mounted() {
+    console.info('++++++++++++++++++', this.$router, this.childrenRoutes.length)
+    // const nodes: Array<Route> = ( as any).options.routes
+    // const { path } = this.$route
+    // const splits = path.match(/\/\w+/g)
+    // const currentBigPath = splits ? splits[0] : ''
+    // const curentNode = nodes.find((e: Route) => e.path == currentBigPath)
+    // let children = curentNode ? (curentNode as any).children : []
+    // children = children.map((e: Route) => {
+    //   const copy: Route = { ...e }
+    //   copy.path = currentBigPath + '/' + copy.path
+    //   return copy
+    // })
+    // this.childrenRoutes = children
+  },
+  beforeRouteUpdate(to, from, next) {
+    console.info('复用组件beforeRouteUpdate', to, from, this)
+    next()
+  },
+  beforeRouteEnter(to, from, next) {
+    console.info('进入页面beforeRouteEnter', to, from, this)
+    next(vm => {
+      console.info('通过next回调请求到了vue实例', vm)
+    })
+  }
+}
 </script>

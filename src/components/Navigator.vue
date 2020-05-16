@@ -13,7 +13,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { routes } from '../router'
-import { RouteConfig } from 'vue-router'
+import VueRouter, { RouteConfig } from 'vue-router'
 @Component
 export default class Navigator extends Vue {
   data() {
@@ -25,6 +25,11 @@ export default class Navigator extends Vue {
   get routeList(): Array<RouteConfig> {
     const result = this.routes || routes
     return result
+  }
+
+  beforeRouteUpdate(to: VueRouter, from: VueRouter, next: Function) {
+    console.info('复用组件beforeRouteUpdate', to, from, this)
+    next()
   }
 }
 </script>

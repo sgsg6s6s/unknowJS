@@ -17,9 +17,30 @@ export const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "unknowJS" */ '../views/API.vue')
   },
   {
-    path: '/question',
-    name: 'Question',
+    path: '/cssTest',
+    name: 'Css Test',
+    component: () => import(/* webpackChunkName: "unknowJS" */ '../views/CSSView.vue')
+  },
+  {
+    path: '/MutationObserver',
+    name: 'Mutation Observer',
+    component: () => import(/* webpackChunkName: "unknowJS" */ '../views/MutationObserver.vue')
+  },
+  {
+    path: '/question/:id',
+    name: 'Question（enter）',
     component: () => import(/* webpackChunkName: "unknowJS" */ '../views/Question.vue')
+    // children: [
+    //   {
+    //     path: 'dynamicRoute/id',
+    //     alias: '',
+    //     name: 'dynamic Route',
+    //     component: () =>
+    //       import(
+    //         /* webpackChunkName: "designPatterns" */ '../components/route/beforeRouteUpdate.vue'
+    //       )
+    //   }
+    // ]
   },
   {
     path: '/vueLinks',
@@ -28,7 +49,7 @@ export const routes: Array<RouteConfig> = [
   },
   {
     path: '/axios',
-    name: 'axios',
+    name: 'axios（leave）',
     component: () => import(/* webpackChunkName: "axios" */ '../views/Axios.vue')
   },
   {
@@ -67,10 +88,30 @@ export const routes: Array<RouteConfig> = [
   }
 ]
 
+routes.forEach(route => {
+  route.beforeEnter = (to, from, next) => {
+    console.info('路由独享beforeEnter', to, from)
+    next()
+  }
+})
+
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  console.info('全局路由监听beforeEach', to, from)
+  next()
+})
+router.beforeResolve((to, from, next) => {
+  console.info('全局解析守卫beforeResolve', to, from)
+  next()
+})
+
+router.afterEach((to, from) => {
+  console.info('全局路由监听afterEach', to, from)
 })
 
 export default router
