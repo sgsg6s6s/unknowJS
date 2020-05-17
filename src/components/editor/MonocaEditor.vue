@@ -38,16 +38,19 @@ import 'monaco-editor/esm/vs/editor/editor.main.js'
 
 import UnknowJS from '@/components/unknowJS/index.tsx'
 // @ts-ignore
-function printToResult(...args) {
+function printToResult(type, ...args) {
   const resultDom = document.querySelector('.result-container-unique')
   const ele = document.createElement('p')
+  const printArr = []
   for (let i = 0; i < args.length; i++) {
     if (!args[i]) {
-      args[i] = String(args[i])
+      printArr.push(String(args[i]))
+    } else {
+      printArr.push(args[i])
     }
   }
-
-  ele.innerHTML = Array.prototype.join.call(args, ' ')
+  ele.style.color = type === 0 ? 'red' : '#111'
+  ele.innerHTML = printArr.join(' ')
   if (resultDom) {
     resultDom.append(ele)
   }
@@ -186,11 +189,13 @@ export default class MonocaEditor extends Vue {
     let result = ''
     if (this.currentShow) {
       result = this.currentShow.replace(
-        /console\.info|console\.warn|console\.log|console\.error/g,
-        'printToResult'
+        /console\.info\(|console\.warn\(|console\.log\(/g,
+        'printToResult(1,'
       )
+      result = result.replace(/console\.error\(/g, 'printToResult(0,')
       result += '\n' + printToResult.toString()
     }
+    console.info(result)
     return result
   }
 

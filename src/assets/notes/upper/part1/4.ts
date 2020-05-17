@@ -19,36 +19,35 @@ export function handler() {
   try {
     var varA = 'A'
     var varA = 'A2'
-    console.info('忽略重复var的定义语句，但varA是后面赋予的值，等于', varA)
+    console.info('1. 忽略重复var的定义语句，但varA是后面赋予的值，varA=', varA)
+
     funcLevel1() // 在前面执行，B也只能属于函数作用域
     try {
-      console.info('varB', varB)
+      console.info('varB=', varB)
     } catch (e) {
-      console.info('外部不能访问函数funcLevel1内部定义的varB', e.toString().split('\n')[0])
+      console.error('外部不能访问函数funcLevel1内部定义的varB', e.toString().split('\n')[0])
     }
 
     function funcLevel1() {
       {
         var varD = 'D'
       }
-      console.info(
-        '块级作用域阻挡不了var提升，varD=',
-        varD,
-        'varB提升的定义，但提升不了赋值，所以varB=',
-        varB
-      )
+      console.info('2. 块级作用域阻挡不了varD提升，varD=', varD)
+      console.info('3. varB提升的定义，但提升不了赋值，所以varB=', varB)
       var varB = 'B'
+      console.info('4. varA赋值在函数调用之前，函数内部获得varA=', varA)
+      console.info('5. varC赋值在函数调用之后，函数内部无法获得varC后面赋予的值，所以varC=', varC)
     }
 
     try {
       funcLevel2()
     } catch (e) {
-      console.info('funcLevel2没有作为函数提升，而是一个标识符提升，funcLevel2是', funcLevel2)
+      console.info('6. funcLevel2没有作为函数提升，而是一个标识符提升，funcLevel2是', funcLevel2)
     }
 
     var varC = 'outter-varC'
     var funcLevel2 = function() {
-      console.info('当前函数作用域能找到varC，就不会冒泡去外作用域再找了,varC=', varC)
+      console.info('7. 当前函数作用域能找到varC，就不会冒泡去外作用域再找了,varC=', varC)
       var varC = 'C'
     }
     funcLevel2()
