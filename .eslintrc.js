@@ -20,6 +20,7 @@ module.exports = {
     // 'prettier/prettier': 'off',
     '@typescript-eslint/no-var-requires': 0,
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/ban-ts-ignore': 'off',
     '@typescript-eslint/no-use-before-define': 0
   },
   overrides: [

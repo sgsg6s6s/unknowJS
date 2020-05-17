@@ -39,21 +39,13 @@ export default {
       import(`@/assets/notes/${volumeNames[volume]}/part${part + 1}/${chapter + 1}.ts`)
         .then(module => {
           this.elements = module.config[chapterName]
-          this.script = this.extractFunction(module.handler)
+          this.script = module.handler
 
         })
         .catch(err => {
           this.elements = [['h1', '暂无数据']]
           console.error(err.message)
         });
-    },
-    extractFunction(handler) {
-      let result = ''
-      if (handler) {
-        const funcName = handler.name
-        result = handler.toString() + '\n' + funcName + '()\n'
-      }
-      return result
     },
   }
 }

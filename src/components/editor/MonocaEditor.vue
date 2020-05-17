@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="editor-container">
     <div class="monoca-wrapper">
       <div class="tabs-bar">
         <el-tabs
@@ -23,7 +23,10 @@
       </div>
       <div id="monoca-editor"></div>
     </div>
-    <div id="result-console"></div>
+    <div
+      ref="result"
+      class="result-container-unique"
+    ></div>
   </div>
 </template>
 
@@ -33,21 +36,46 @@ import { editor } from 'monaco-editor'
 import 'monaco-editor/esm/vs/editor/editor.main.js'
 // import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution'
 
+import UnknowJS from '@/components/unknowJS/index.tsx'
+// @ts-ignore
+function printToResult(...args) {
+  const resultDom = document.querySelector('.result-container-unique')
+  const ele = document.createElement('p')
+  for (let i = 0; i < args.length; i++) {
+    if (!args[i]) {
+      args[i] = String(args[i])
+    }
+  }
+
+  ele.innerHTML = Array.prototype.join.call(args, ' ')
+  if (resultDom) {
+    resultDom.append(ele)
+  }
+}
+
 @Component
 export default class MonocaEditor extends Vue {
-  tabNames = ['Template', 'Script', 'Css']
+  tabNames = ['Notes', 'Script', 'Css']
   monacoEditor!: editor.IStandaloneCodeEditor
   activeName = this.tabNames[0].toLowerCase()
+  currentShow = ''
+  unknowJS!: UnknowJS
 
   @Prop() template!: string
-  @Prop() script!: string
+  @Prop() script!: Function
   @Prop() css!: string
 
   get selectTabIndex() {
     return this.tabNames.findIndex(e => e.toLowerCase() === this.activeName)
   }
+
+  // 接收外部通知
   get value() {
     return this.template + this.script + this.css
+  }
+
+  get elements() {
+    return eval(this.currentShow)
   }
 
   @Watch('value')
@@ -77,6 +105,13 @@ export default class MonocaEditor extends Vue {
     this.setTheme()
 
     this.registerVueEvents()
+    const model = this.monacoEditor.getModel()
+    if (model) {
+      model.onDidChangeContent(event => {
+        console.info(event)
+        this.currentShow = this.monacoEditor.getValue()
+      })
+    }
   }
 
   registerVueEvents() {
@@ -91,14 +126,72 @@ export default class MonocaEditor extends Vue {
     }
   }
 
+  clearResult() {
+    const resultDom = this.$refs.result as HTMLElement
+    resultDom.innerHTML = ''
+    if (this.unknowJS) {
+      this.unknowJS.$destroy()
+    }
+  }
+
   runJS() {
-    console.info()
+    this.clearResult()
+    switch (this.selectTabIndex) {
+      case 0: {
+        this.operateVueForNoteShow()
+        break
+      }
+      case 1: {
+        this.renderScript()
+        break
+      }
+      case 2: {
+        break
+      }
+    }
+  }
+
+  operateVueForNoteShow() {
+    try {
+      const resultDom = this.$refs.result as HTMLElement
+
+      this.unknowJS = new UnknowJS({ propsData: { elements: this.elements } }).$mount()
+      // console.info(this.currentShow, elements, this.unknowJS.$props, this.unknowJS.$el)
+      resultDom.innerHTML = this.unknowJS.$el.innerHTML
+    } catch (e) {
+      console.info(this.value, e)
+    }
   }
 
   renderScript() {
     if (this.selectTabIndex === 1) {
-      eval(this.script)
+      const jsCode = this.formatFunction()
+      if (jsCode.length > 0) {
+        eval(jsCode)
+      }
     }
+  }
+
+  getInitJsCode() {
+    let result = ''
+    if (this.script) {
+      const handler = this.script
+      const funcName = handler.name
+      result = handler.toString() + '\n' + funcName + '()\n'
+    }
+    return result
+  }
+
+  formatFunction() {
+    let result = ''
+    if (this.currentShow) {
+      result = this.currentShow.replace(
+        /console\.info|console\.warn|console\.log|console\.error/g,
+        'printToResult'
+      )
+      result += '\n' + printToResult.toString()
+    }
+    return result
   }
 
   // renderTemplate() {
@@ -110,7 +203,7 @@ export default class MonocaEditor extends Vue {
   //   this.monacoEditor.setValue((this as any)[this.activeName] || '')
   // }
 
-  formatTemplateData() {
+  formatNoteData() {
     const elements = this.template || []
     let result = '[\n'
     for (const element of elements) {
@@ -129,11 +222,11 @@ export default class MonocaEditor extends Vue {
     let value = ''
     switch (this.selectTabIndex) {
       case 0: {
-        value = this.formatTemplateData()
+        value = this.formatNoteData()
         break
       }
       case 1: {
-        value = this.script
+        value = this.getInitJsCode()
         break
       }
       case 2: {
@@ -141,6 +234,7 @@ export default class MonocaEditor extends Vue {
         break
       }
     }
+    this.currentShow = value
     this.monacoEditor.setValue(value)
   }
 
@@ -165,36 +259,39 @@ export default class MonocaEditor extends Vue {
 </script>
 
 <style scoped lang="less">
-.monoca-wrapper {
-  display: inline-block;
-  width: 40%;
-  height: 340px;
+.editor-container {
+  display: flex;
+  .monoca-wrapper {
+    display: inline-block;
+    width: 40%;
+    height: 340px;
 
-  .tabs-bar {
-    position: relative;
-    .el-tabs {
-      height: 40px;
+    .tabs-bar {
+      position: relative;
+      .el-tabs {
+        height: 40px;
+      }
+
+      .run-btn {
+        position: absolute;
+        z-index: 10;
+        right: 10px;
+        top: 7px;
+      }
     }
 
-    .run-btn {
-      position: absolute;
-      z-index: 10;
-      right: 10px;
-      top: 7px;
+    #monoca-editor {
+      height: 300px;
+      width: 100%;
     }
   }
 
-  #monoca-editor {
-    height: 300px;
-    width: 100%;
+  .result-container-unique {
+    display: inline-block;
+    margin-left: 10px;
+    width: 58%;
+    background: #ccc;
+    padding-left: 10px;
   }
-}
-
-#result-console {
-  display: inline-block;
-  margin-left: 10px;
-  width: 58%;
-  height: 340px;
-  background: #ccc;
 }
 </style>
