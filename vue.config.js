@@ -3,7 +3,7 @@ const { readFileInPath } = require('./src/utils/node/extractMsgByDir')
 const notePathDir = '/src/assets/notes'
 const notePath = __dirname + notePathDir
 const files = readFileInPath(notePath)
-console.info(files)
+// console.info(files)
 module.exports = {
   productionSourceMap: true,
   configureWebpack: config => {
