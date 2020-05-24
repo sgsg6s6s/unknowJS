@@ -1,6 +1,5 @@
 <template>
   <div class="question-wrapper">
-    <BeforeRouteUpdate />
     <router-link to="/question/1">question1</router-link>
     <router-link to="/question/2">question2</router-link>
     <h1>前端常见的攻击以及防御</h1>
@@ -144,12 +143,10 @@ function convert2Tree() {
 
 console.info(convert2Tree())
 import Navigator from '@/components/Navigator.vue'
-import BeforeRouteUpdate from '@/components/route/beforeRouteUpdate.vue'
 import RouteVue from '@/components/mixins/RouteVue.vue'
 export default {
   mixins: [RouteVue],
   components: {
-    BeforeRouteUpdate
   },
   data() {
     return {

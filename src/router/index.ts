@@ -28,19 +28,8 @@ export const routes: Array<RouteConfig> = [
   },
   {
     path: '/question/:id',
-    name: 'Question（enter）',
+    name: 'Question(enter)',
     component: () => import(/* webpackChunkName: "unknowJS" */ '../views/Question.vue')
-    // children: [
-    //   {
-    //     path: 'dynamicRoute/id',
-    //     alias: '',
-    //     name: 'dynamic Route',
-    //     component: () =>
-    //       import(
-    //         /* webpackChunkName: "designPatterns" */ '../components/route/beforeRouteUpdate.vue'
-    //       )
-    //   }
-    // ]
   },
   {
     path: '/vueLinks',
@@ -49,7 +38,7 @@ export const routes: Array<RouteConfig> = [
   },
   {
     path: '/axios',
-    name: 'axios（leave）',
+    name: 'axios(leave)',
     component: () => import(/* webpackChunkName: "axios" */ '../views/Axios.vue')
   },
   {

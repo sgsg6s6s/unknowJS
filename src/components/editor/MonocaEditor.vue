@@ -49,6 +49,7 @@ function printToResult(type, ...args) {
       printArr.push(args[i])
     }
   }
+  console.log(...args)
   ele.style.color = type === 0 ? 'red' : '#111'
   ele.innerHTML = printArr.join(' ')
   if (resultDom) {
@@ -195,7 +196,7 @@ export default class MonocaEditor extends Vue {
       result = result.replace(/console\.error\(/g, 'printToResult(0,')
       result += '\n' + printToResult.toString()
     }
-    console.info(result)
+    // console.info(result)
     return result
   }
 

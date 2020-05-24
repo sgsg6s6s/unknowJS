@@ -4,7 +4,7 @@ function readFileInPath(dirPath) {
   const jsonFiles = []
   ;(function searchFiles(path) {
     const files = fs.readdirSync(path)
-    files.forEach(function(item, index) {
+    files.forEach(function(item) {
       const fPath = join(path, item)
       const stat = fs.statSync(fPath)
       if (stat.isDirectory() === true) {

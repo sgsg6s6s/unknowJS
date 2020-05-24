@@ -4,3 +4,4 @@ declare module '*.vue' {
 }
 
 declare module '@/components/unknowJS/metadata/test.js'
+declare module '@/assets/notes/index.js'

@@ -1,0 +1,53 @@
+<script>
+  console.info('script on top')
+</script>
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="http://localhost:8080/quickTest/html.worker.js"></script>
+    <script src="./error.js"></script>
+    <script>
+      console.info('script below error.js')
+    </script>
+  </head>
+  <body>
+    <input type="text" id="name" />
+    <div class="show"></div>
+    <p>
+      一、CSS选择器有哪些？包括基本的组合选择，多多益善<br />
+      #id、.class、element、<br />
+      [href]、[href='/index']、[href~='index']、[href*='index']、[href|='admin']、[href^='admin']、[href$='.pdf']、<br />
+      element1,element2、element1 element2、element1 > element2、element1 + element2、element1 ~
+      element2、<br />
+      :not(p)、:first-child、:last-child、:nth-child(n)、:nth-last-child(n)、:before、:after、<br />
+      :enabled、:checked、:disabled<br />
+    </p>
+  </body>
+  <script>
+    const data = {}
+
+    const input = document.querySelector('#name')
+    const show = document.querySelector('.show')
+    Object.defineProperty(data, 'inputName', {
+      setter: function(name) {
+        console.info('set', this._inputName, name)
+        this._inputName = name
+        show.innerHTML = name
+      },
+      getter: function() {
+        console.info('get', this._inputName)
+        return this._inputName
+      }
+    })
+
+    input.addEventListener('input', event => {
+      data.inputName = event.currentTarget.value
+    })
+  </script>
+  <script src="./2.js"></script>
+  <!-- <script src="./1.js"></script> -->
+</html>
+<script>
+  console.info('script at last')
+</script>

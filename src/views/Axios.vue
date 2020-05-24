@@ -42,12 +42,9 @@
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import axios from 'axios'
 import VueRouter from 'vue-router'
-import BeforeRouteUpdate from '@/components/route/beforeRouteUpdate.vue'
 
 @Component({
-  components: {
-    BeforeRouteUpdate
-  }
+  components: {}
 })
 export default class AxiosView extends Vue {
   msg = 'empty'

@@ -33,6 +33,71 @@ export const config: { [key: string]: string[][] } = {
 
 export function handler() {
   try {
+    var moduleMaker = (function CoolModule() {
+      const modules = {}
+      function define(name, deps, callback) {
+        for (let i = 0; i < deps.length; i++) {
+          deps[i] = modules[deps[i]]
+        }
+        console.info('view callback before apply', callback)
+        modules[name] = callback.apply(callback, deps) // 核心代码
+      }
+
+      function get(name) {
+        return modules[name]
+      }
+
+      return {
+        define,
+        get
+      }
+    })()
+
+    moduleMaker.define('node', [], function() {
+      console.info('view this in node', this)
+      function createNode(value, next) {
+        return {
+          value,
+          next
+        }
+      }
+      return {
+        createNode
+      }
+    })
+
+    moduleMaker.define('linkList', ['node'], function(nodeAPI) {
+      console.info('view this in linkList', this)
+      function createLinkList(arr) {
+        let parentNode = null
+        for (let i = arr.length - 1; i >= 0; i--) {
+          parentNode = nodeAPI.createNode(arr[i], parentNode)
+        }
+
+        return parentNode
+      }
+
+      function print(linkList) {
+        let result = linkList.value
+        while (linkList.next) {
+          linkList = linkList.next
+          result += ' => '
+          result += linkList.value
+        }
+        return result
+      }
+
+      return {
+        createLinkList,
+        print
+      }
+    })
+
+    const arr = [1, 3, 4, 2, 7, 9, 6]
+    console.info('array', arr)
+    const linkListModule = moduleMaker.get('linkList')
+    const linkList = linkListModule.createLinkList(arr)
+    console.info('linkList', linkListModule.print(linkList))
   } catch (e) {
     console.warn(e)
   }
