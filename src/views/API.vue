@@ -20,7 +20,7 @@ export default class CatalogSelector extends Vue {
     for (const funcObject of baseFunctions) {
       const protoType = funcObject.prototype
       const groupName = protoType.constructor.name
-      console.info(protoType)
+      console.info('protoType',protoType)
       this.printAndConsole('-----分割线----' + groupName + '的方法----')
       this.printAPI(funcObject)
       this.printAndConsole('---------' + groupName + '原型的方法----')
