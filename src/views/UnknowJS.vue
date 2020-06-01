@@ -1,8 +1,13 @@
 <template>
   <div class="unknow-js-container">
+    <input
+      @click="clickEditor"
+      v-model="script"
+    >
     <CatalogSelector @chapterChanged="chapterChanged" />
     <!-- <UnknowJSNote  :elements="elements"/> -->
     <MonocaEditor
+      test="1"
       @click="clickEditor"
       :template="elements"
       :script="script"

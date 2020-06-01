@@ -52,6 +52,14 @@
         v-for="item in 3"
       >label{{item + '&nbsp;'}}</label>
     </div>
+    <div class="flex-test">
+      <div
+        class="item"
+        :key="index"
+        v-for="(item,index) in [1,2,3,4,5,1,2,3,4,5]"
+        :style="index%2===0?'height:30px':''"
+      >{{index}}</div>
+    </div>
   </div>
 </template>
 
@@ -360,6 +368,22 @@ export default class CSSView extends Vue {
       .footer {
         overflow: hidden;
       }
+    }
+  }
+
+  .flex-test {
+    width: 100px;
+    background: gray;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-content: center;
+    align-items: stretch;
+    .item {
+      width: 50px;
+      background: blue;
+      color: white;
     }
   }
 }
