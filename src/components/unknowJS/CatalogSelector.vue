@@ -64,6 +64,13 @@ export default class CatalogSelector extends Vue {
   bookValueChanged() {
     this.partValue = 0
     this.emptyChapterValue()
+    this.$emit(
+      'chapterChanged',
+      this.bookValue,
+      this.partValue,
+      this.chapterValue,
+      this.chapterName
+    )
   }
 
   @Watch('partValue', {
@@ -71,6 +78,13 @@ export default class CatalogSelector extends Vue {
   })
   partValueChanged() {
     this.emptyChapterValue()
+    this.$emit(
+      'chapterChanged',
+      this.bookValue,
+      this.partValue,
+      this.chapterValue,
+      this.chapterName
+    )
   }
 
   @Watch('chapterValue', {

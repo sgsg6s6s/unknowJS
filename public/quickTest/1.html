@@ -5,8 +5,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <script src="http://localhost:8080/quickTest/html.worker.js"></script>
-    <script src="./error.js"></script>
+    <!-- <script src="http://localhost:8080/quickTest/html.worker.js"></script> -->
     <script>
       console.info('script below error.js')
     </script>
@@ -48,18 +47,10 @@
       data.inputName = event.currentTarget.value
     })
   </script>
-  <script src="./pkDelegation.js"></script>
-  <!-- <script src="./pkClass.js"></script> -->
-  <script src="./delegation.js"></script>
-  <script src="./extend.js"></script>
-  <script src="./class.js"></script>
-  <!-- <script src="./混入.js"></script>
-  <script src="./原型链.js"></script>
-  <script src="./set-get-proxy.js"></script> -->
-  <!-- <script src="./对象的属性描述符.js"></script> -->
-  <!-- <script src="./1.js"></script> -->
-  <!-- <script src="./2.js"></script> -->
+  <script src="./middle/appendixA.js"></script>
 </html>
 <script>
-  console.info('script at last')
+  const scriptTag = document.createElement('script')
+  scriptTag.src = './error.js'
+  document.body.append(scriptTag)
 </script>
