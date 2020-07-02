@@ -1,9 +1,9 @@
 <template>
   <div>
-    <BeforeRouteUpdate />
     <div class="request-wrapper">
       <div>{{msg}}</div>
       <el-button @click="axiosGet">request</el-button>
+      <el-button @click="jsonGet">json</el-button>
     </div>
     <div class="upload-wrapper">
       <div class="upload-view">
@@ -64,6 +64,16 @@ export default class AxiosView extends Vue {
     return this.fileList.reverse()
   }
 
+  jsonGet() {
+    axios
+      .get('https://echarts.apache.org/examples/data/asset/geo/HK.json?callback')
+      .then(function(response) {
+        console.log(response)
+      })
+      .catch(function(error) {
+        console.log(error)
+      })
+  }
   axiosGet() {
     console.info(this)
     axios({

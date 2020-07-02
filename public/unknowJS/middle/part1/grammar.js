@@ -59,6 +59,7 @@ console.info(
 
 console.info('2. 多个短路运算符 && 的优先级大于 || ，而我觉得从左至右进行短路判断就可以了')
 console.info('3. 从右向左判断表达式优先级的有，三元运算符和多个等号赋值')
+console.info('4. 关联顺序不决定执行顺序，三元运算符从左向右执行，而连续赋值语句从右向左执行')
 console.info('window.a = window.b = window.c =3 =>', (window.a = window.b = window.c = 3))
 console.info("'a' ? 'b' ? 'c' : 'd' : 'e'  =>", 'a' ? ('b' ? 'c' : 'd') : 'e')
 console.info('四、自动补分号')
@@ -113,6 +114,8 @@ console.info('1. 先执行try代码，但finally代码块在try代码块最后�
 console.info('2. finally代码的return或break标签可能会覆盖try的return')
 
 console.info('七、switch')
+console.info('1. switch(a) 和 case 1时，case的判断是===，即a===1才为真')
+console.info('2. default的顺序放到case前会提前判断（按书写顺序判断）')
 
 const a = 10
 switch (a) {
@@ -135,3 +138,10 @@ switch (a) {
 console.info('1. 即使case语句匹配到，如果不执行break，还是会走default代码块')
 console.info('2. default代码块可以放到任何case的前后')
 console.info('3. default代码块如果没有break，还会向后找case')
+console.info('八、运算符的优先级（从小到大）')
+console.info(',')
+console.info('=')
+console.info('三元运算符 x ? y : z')
+console.info('==或===')
+console.info('&& ||,其中&&比||优先级高')
+console.info('圆括号()')

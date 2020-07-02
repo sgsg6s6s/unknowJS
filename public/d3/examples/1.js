@@ -5,3 +5,4 @@ d3.selectAll('p').style('color', function() {
 })
 
 typeof a
+console.info('引用1.js，不需要加defer和async')
