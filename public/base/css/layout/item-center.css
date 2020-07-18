@@ -1,0 +1,94 @@
+.item-default {
+  width: 128px;
+  height: 24px;
+  background-color: red;
+}
+
+.item1 {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.c2 {
+  display: flex;
+  justify-content: center;
+}
+
+.c3 {
+  position: relative;
+}
+
+.item3 {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.c4 {
+  position: relative;
+}
+
+.item4 {
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+}
+
+.c5 {
+  text-align: center;
+}
+
+.item5 {
+  display: inline;
+}
+
+.float-first {
+  float: left;
+  margin-left: 50%;
+}
+
+.item6 {
+  position: relative;
+  right: 50%;
+}
+
+.v-center .c1 {
+  line-height: 42px;
+}
+
+.v-center .item1 {
+  display: inline;
+}
+
+.v-center .c2 {
+  display: flex;
+  align-items: center;
+}
+
+.v-center .c3 {
+  position: relative;
+}
+
+.v-center .item3 {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.v-center .c4 {
+  position: relative;
+}
+
+.v-center .item4 {
+  position: absolute;
+  bottom: 50%;
+  transform: translateY(50%);
+}
+
+.sprite {
+  background-image: url(../../../static/img/sprites.jpg);
+  background-repeat: no-repeat;
+  width: 50px;
+  height: 40px;
+  display: inline-block;
+}

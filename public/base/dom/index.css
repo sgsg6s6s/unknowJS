@@ -1,0 +1,20 @@
+aside {
+  margin-bottom: 10px;
+}
+
+.outter {
+  height: 20px;
+  width: 100px;
+  padding: 25px;
+  background: yellow;
+}
+.inner {
+  height: 20px;
+  width: 100px;
+  background: green;
+}
+.loop {
+  height: 20px;
+  width: 100px;
+  background: green;
+}

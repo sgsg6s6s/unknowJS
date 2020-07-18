@@ -6,6 +6,28 @@ const files = readFileInPath(notePath)
 // console.info(files)
 module.exports = {
   productionSourceMap: true,
+  devServer: {
+    port: 8080,
+    open: true,
+    // before,
+    proxy: {
+      '/api/mock': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api/mock': '/mock'    //代理的路径
+        }
+      },
+      '^/api/auth': {
+        target: 'http://localhost:9000',
+        changeOrigin: true,
+      },
+      '^/api/data': {
+        target: 'http://localhost:9000',
+        changeOrigin: true,
+      },
+    }
+  },
   configureWebpack: config => {
     // console.info(config.node)
     if (process.env.NODE_ENV === 'production') {

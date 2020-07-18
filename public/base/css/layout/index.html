@@ -1,0 +1,105 @@
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <link type="text/css" rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <header>盒子模型</header>
+    <aside class="box-test">
+      <div class="box1">height:40,width:200</div>
+      <div class="box2">content</div>
+      <button id="borderBox">border box</button>
+      <button id="contentBox">content box</button>
+      <span id="note"></span>
+    </aside>
+
+    <header>flex 布局</header>
+    <aside class="flex"></aside>
+
+    <header>position 布局</header>
+    <aside class="position">
+      <div class="relative default">left:40px;top:15px;</div>
+      <div class="absolute default">body=>left:780px;top:15px;</div>
+      <div class="fixed default">fixed window=>right:80px;top:15px;</div>
+    </aside>
+
+    <header>
+      css 优先级：!important > style（相同属性后面的优先级高） >
+      class(相同属性后面的优先级高，层级深优先级高) > 标签 > 继承
+    </header>
+    <aside class="css">
+      <ul class="wrapper">
+        <div>
+          标签修饰 border: 1px solid goldenrod; width: 320px; height: 40px;
+        </div>
+        <div class="size">
+          class比标签优先 (width: 850px;)
+        </div>
+        <div class="size size2">
+          class="size size2" size2(width: 900px;)覆盖size
+        </div>
+        <div class="size size2" style="width: 950px;">
+          style（width: 950px）比class优先
+        </div>
+        <div style="width: 950px;width: 1000px;">
+          style="width: 950px;width: 1000px;" 后面的覆盖
+        </div>
+        <div class="size3" style="width: 1000px;">
+          aside.css ul .size3 { width: 1050px !important; } class + !important 比style优先级高<br />
+          .css ul div.size3 { width: 1100px; } class嵌套也比不过style
+        </div>
+      </ul>
+    </aside>
+    <header>水平居中</header>
+    <aside class="h-center container">
+      <div class="default c1">
+        <div class="item-default item1">h center1</div>
+      </div>
+      <div class="default c2">
+        <div class="item-default item2">h center2</div>
+      </div>
+      <div class="default c3">
+        <div class="item-default item3">h center3</div>
+      </div>
+      <div class="default c4">
+        <div class="item-default item4">h center4</div>
+      </div>
+      <div class="default c5">
+        <div class="item-default item5">h center5</div>
+      </div>
+      <div class="default c6">
+        <div class="float-first">
+          <div class="item-default item6">h center6</div>
+        </div>
+      </div>
+      <center class="block" style="width: 400px;">
+        <div class="default" style="height: 20px;">wrapped by center tag</div>
+      </center>
+      <footer></footer>
+    </aside>
+
+    <header>垂直居中</header>
+    <aside class="v-center container">
+      <div class="default c1">
+        <div class="item-default item1">v center1</div>
+      </div>
+      <div class="default c2">
+        <div class="item-default item2">v center2</div>
+      </div>
+      <div class="default c3">
+        <div class="item-default item3">v center3</div>
+      </div>
+      <div class="default c4">
+        <div class="item-default item4">v center4</div>
+      </div>
+    </aside>
+
+    <header>雪碧图</header>
+    <aside class="v-center container ">
+      <div id="spriteContainer"></div>
+    </aside>
+
+    <script src="../../../static/utils/jquery.min.js" type="text/javascript"></script>
+    <script src="./index.js" type="text/javascript" charset="utf-8"></script>
+  </body>
+</html>

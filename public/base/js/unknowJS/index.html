@@ -29,6 +29,14 @@
   <script>
     const data = {}
 
+    let x = (function b() {
+      let a = 1
+      return {
+        a
+      }
+    })()
+    console.info('a in cluster', x.a)
+
     const input = document.querySelector('#name')
     const show = document.querySelector('.show')
     Object.defineProperty(data, 'inputName', {

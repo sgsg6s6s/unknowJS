@@ -1,0 +1,65 @@
+<html>
+  <head> </head>
+  <body>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      body > div {
+        width: 50%;
+        box-sizing: border-box;
+        border: 1px solid black;
+      }
+    </style>
+
+    <div class="socket-container">
+      <strong>abc</strong>def <em>abc</em>def <i>abc</i>def <b>abc</b>def <dfn>abc</dfn>def
+      <h1>Web Socket</h1>
+      <p>【userId】：</p>
+      <div><input id="userId" name="userId" type="text" value="10" /></div>
+      <p>【toUserId】：</p>
+      <div><input id="toUserId" name="toUserId" type="text" value="20" /></div>
+      <p>【toUserId】：</p>
+      <div><input id="contentText" name="contentText" type="text" value="hello websocket" /></div>
+      <p>操作:</p>
+      <div><button onclick="openSocket()">开启socket</button></div>
+      <p>【操作】：</p>
+      <div><button onclick="sendMessage()">发送消息</button></div>
+    </div>
+    <div class="session-container"></div>
+    <div class="cookie-container"></div>
+    <div class="worker-container"></div>
+    <div class="localStorage-container"></div>
+    <div class="sessionStorage-container"></div>
+
+    <script>
+      const now = Date.now()
+      // setTimeout(() => {
+      //   console.info('setTimeout finish', Date.now() - now)
+      // }, 3000)
+      // while (Date.now() - now < 5000) {}
+      // console.info('main finish', Date.now() - now)
+
+      // setInterval(() => {
+      //   const now2 = Date.now()
+      //   while (Date.now() - now2 < 5000) {}
+      //   console.info('setInterval finish', Date.now() - now2)
+      //   console.info('setInterval time past', Date.now() - now)
+      // }, 3000)
+      // console.info('main finish', Date.now() - now)
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="../../../static/utils/vue.js" type="text/javascript"></script>
+    <script src="./vueFramework.js" type="text/javascript"></script>
+    <script src="../../../static/utils/jquery.min.js" type="text/javascript"></script>
+    <script src="./cookie.js" type="text/javascript"></script>
+    <script src="./session.js" type="text/javascript"></script>
+    <script src="./localStorage.js" type="text/javascript"></script>
+    <script src="./sessionStorage.js" type="text/javascript"></script>
+    <script src="./webSocket.js" type="text/javascript"></script>
+    <script src="./webWorker.js" type="text/javascript" charset="utf-8"></script>
+  </body>
+</html>

@@ -1,0 +1,86 @@
+.box-test {
+  display: flex;
+  align-items: flex-start;
+  border: 1px solid black;
+}
+
+.box1 {
+  display: inline-block;
+  width: 200px;
+  height: 40px;
+  border: 2px solid gray;
+}
+
+.box2 {
+  display: inline-block;
+  width: 200px;
+  height: 40px;
+  margin: 10px;
+  padding: 10px;
+  border: 2px solid yellowgreen;
+}
+
+aside.flex {
+  height: 200px;
+  display: flex;
+  flex-flow: row-reverse wrap;
+  justify-content: flex-end;
+  align-items: flex-end;
+  align-content: flex-end;
+}
+
+.child-div {
+  border: 2px solid goldenrod;
+  width: 100px;
+  height: 40px;
+  margin: 5px;
+}
+
+aside.position {
+  position: static;
+  height: 80px;
+}
+
+.relative {
+  position: relative;
+  background-color: greenyellow;
+  left: 40px;
+  top: 15px;
+}
+
+.absolute {
+  position: absolute;
+  background-color: royalblue;
+  left: 780px;
+  top: 15px;
+}
+
+.fixed {
+  position: fixed;
+  background-color: plum;
+  right: 80px;
+  top: 15px;
+}
+
+.css div {
+  border: 3px solid goldenrod;
+  width: 800px;
+  height: 40px;
+  margin: 5px;
+}
+
+.css .size {
+  width: 850px;
+}
+
+.css .size2 {
+  width: 900px;
+}
+
+aside.css ul .size3 {
+  width: 1050px !important;
+}
+
+aside.css ul div.size3 {
+  width: 1100px;
+}
