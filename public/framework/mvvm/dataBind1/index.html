@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      label {
+        width: 140px;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <form id="applyForm">
+        <label for="nickname">Nickname:</label>
+        <input name="nickname" type="text" /><br />
+        <label for="age">Age:</label>
+        <input name="age" type="text" /><br />
+        <label for="isManager">Manager:</label>
+        <input name="isManager" type="radio" value="true" />True
+        <input name="isManager" type="radio" value="false" />False<br />
+        <label for="pet">Pet:</label>
+        <select name="pet">
+          <option value="0">Choose</option>
+          <option value="1">dog</option>
+          <option value="2">cat</option>
+          <option value="3">ant</option>
+        </select>
+      </form>
+      <button class="commit-btn">Commit</button>
+      <header><h1>Reactive</h1></header>
+      <div class="reactive-msg"></div>
+      <header><h1>Commit msg</h1></header>
+      <div class="commit-msg"></div>
+    </div>
+  </body>
+</html>
+<script src="index.js"></script>

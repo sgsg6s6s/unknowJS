@@ -1,0 +1,36 @@
+.bfc {
+  position: relative;
+  padding: 30px 0;
+}
+
+.bfc-not {
+  position: relative;
+  padding: 30px 0;
+}
+
+.title {
+  position: absolute;
+  height: 30px;
+  width: 100%;
+  top: 0px;
+  background-color: rgb(192, 183, 166);
+}
+
+.ele1 {
+  margin-bottom: 20px;
+}
+
+.ele2 {
+  margin-top: 10px;
+  background-color: green;
+}
+
+.float1 {
+  float: left;
+}
+
+.height-div {
+  background-color: blue;
+  height: 20px;
+  clear: both;
+}

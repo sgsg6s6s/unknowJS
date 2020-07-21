@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <link type="text/css" rel="stylesheet" href="../../../static/css/common.css" />
+    <link type="text/css" rel="stylesheet" href="./index.css" />
+    <title>BFC</title>
+  </head>
+  <body>
+    <header>BFC(Block Formatting Context)的BUG</header>
+    <aside class="bfc">
+      <div class="rect ele1">margin-bottom: 20px;</div>
+      <div class="rect ele2">margin-top: 10px;<br />上下margin重叠了10个像素</div>
+    </aside>
+    <header>Float</header>
+    <aside class="bfc-not">
+      <div class="title">
+        我是绝对定位，我们所在的aside不是bfc,但我自己是bfc。另外，发现必须加top:
+        0px;才能占据父亲的padding区域。
+      </div>
+      <div class="rect float1">float:left</div>
+      <div class="height-div">
+        height: 20px;clear:both;和float元素不在同一行，通过自己的高度撑高父级元素
+      </div>
+    </aside>
+
+    <script src="./index.js" type="text/javascript" charset="utf-8"></script>
+  </body>
+</html>

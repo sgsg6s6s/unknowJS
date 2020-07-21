@@ -289,7 +289,7 @@ export default class CSSView extends Vue {
       .bfc-wrapper {
         box-sizing: border-box;
         border: 1px solid aqua;
-        overflow: hidden;
+        // overflow: hidden;
       }
     }
 
