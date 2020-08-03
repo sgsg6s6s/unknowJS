@@ -1,42 +1,154 @@
-/**
- * 规则字符串
- * 
- * test unit:
- *  '<b :value="a<2 && b>3" :key="item.id" v-for="(item,index) in items">{{a > b}}</b><input/><input/><span></span><d>123</d><c/><f/><e>123</e>'.split(/(<([a-zA-Z0-9]+)( [^`'" ]*=([`'"]).*\4)*(?:>?.*<\/\2>|\/>))/)
- * 匹配 <XXX CCC="DDD">YYY</XXX >或<XXX/> 
- * 注意：规则放到字符串里好多字符都加了转义
- * $1:匹配内容, $2:tagName, $3:键值对字符串, $4:引号 $5:innerHTML
- */
-const closedTagRegString = '(<([a-zA-Z0-9]+)( [^`\'" ]*=([`\'"]).*\\4)*(?:>?(.*)<\\/\\2>|\\/>))'
-const closedTagReg = new RegExp(closedTagRegString, 'g') // RegExp
 
 
-const innerTextReg = /<([a-zA-Z0-9]+)( [^`'" ]*=([`'"]).*\3)*>(.*)<\/\1>/ // 匹配标签内部内容
-const splitResultExcludes = ['', ' ', '\'', '"', '`', undefined]
-const closedIngoreTagNames = ['input', 'img', 'hr', 'br']
-const closedIngoreRegArr = []
 
-for (const tag of closedIngoreTagNames) {
-  closedIngoreRegArr.push(new RegExp(closedTagRegString.replace('[a-zA-Z0-9]+', tag), 'g'))
-}
 
 const shakeTable = {
-  '\\r\\n': '',
-  '\\s+': ' ',
-  ' *= *': '=',
-  ' *" *': '"',
-  ' *\' *': '\'',
-  ' *` *': '`',
-  ' *< *': '<',
-  ' *> *': '>',
-  ' *\\/>': '\\/>',
+  '<!--.*?-->': '', // 注释
+  '\\r\\n': '', // 换行
+  '\\s+': ' ', // 空白字符串变为一个空格
+  ' *(=|<|>|/>) *': '$1',// 左右都不需要保留空格
+  ' *("|\'|`)': '$1', // 去掉引号前的空格
 }
 
-function formatUnclosedTag(html) {
-  let result = html
-  for (const reg of closedIngoreRegArr) {
-    result = result.replace(reg, shakeTable[reg])
+// 格式化未封闭的标签
+const toCloseTagReplaceReg = /(<(input|img|hr|br)( [^`'" ]*=([`'"])((?<!\/>).)*?\4)*)>/g
+//  将html字符串拆分出完整的标签字符串
+const nodeSplitReg = /(?:(<\/?[a-zA-Z0-9]+(?: [^`'" ]*=([`'"]).*?\2)*\/?>))/g
+
+// 从完整的标签字符串提取 没有值的标签属性名称
+const extractSingleAttrMatchReg = /(?<!=[`'"][^`'"]*)(?<= )[^<`'">=]+(?= |>)/g
+
+// 从完整的标签字符串提取 所有标签属性名称
+const extractAllAttrMatchReg = /(?<= )[^`'" ]*(?==([`'"])(?:.*?\1))|(?<!=[`'"][^`'"]*)(?<= )[^<`'">=]+(?= |>)/g
+
+// 从完整的标签字符串提取 属性名称和值
+const extractValuedAttrMatchReg = /(?<= )[^`'" ]*=([`'"])(?:.*?\1)/g
+
+// 提取属性名称和属性值
+const extractKeyValueExecReg = /([^<`'">\\/ ]*)=([`'"])(.*?)\2/g
+// 提取tag名字
+const extractTagNameMatchReg = /(?<=<)[^<'"`>\\/ ]*(?= ?)/g
+
+// split方式属性提取，但遇到无值的属性不好处理，暂时不使用这种方式
+const attributeSplitReg = /(?: ([^`\\'" ]*)=([`'"])(?:.*?\2))/g
+
+
+
+function formatHTML(html) {
+  let tree = []
+  const startMills = Date.now()
+  if (typeof html === "string") {
+    console.info('html length', html.length)
+    const shaked = shakeChars(html)
+    console.info('shaked length', shaked.length, shaked)
+    const closedHTML = formatUnclosedTag(shaked)
+    console.info('closedHTML length', closedHTML.length, closedHTML)
+    const tags = _collectTag(closedHTML)
+    console.info('tags length', tags.length, tags)
+    tree = buildTree(tags)
+    console.info('tree length', tree.length, tree)
   }
+  console.info('format HTML costs', (Date.now() - startMills) / 1000)
+  return tree
+}
+
+function _collectTag(html) {
+  const result = []
+  if (html) {
+    const splitResults = html.split(nodeSplitReg)
+    for (const tagPeriod of splitResults) {
+      if (tagPeriod && tagPeriod.length > 0 && !["`", "\\'", "\""].includes(tagPeriod)) {
+        result.push(tagPeriod)
+      }
+    }
+  }
+  return result
+}
+
+function buildTree(tags) {
+  const root = []
+  const stack = []
+  for (let i = 0; i < tags.length; i++) {
+    const tag = tags[i]
+    const tagLength = tag.length
+    if (tag[0] === '<' && tag[tagLength - 1] === '>') { // <xxxx>
+      if (tag[1] === '/') { // </xxxx
+        if (tag[tagLength - 2] === '/') {
+          console.error('bad tag </xxxx/>', tag)
+        } else { //</xxxx> 出栈
+          outStack(stack, root)
+        }
+      } else if (tag[tagLength - 2] === '/') { // <xxxx/> 入栈 + 出栈
+        const node = createTagNode(tag, stack)
+        inStack(node, stack)
+        outStack(stack, root)
+      } else { // <xxxx> 入栈
+        const node = createTagNode(tag)
+        inStack(node, stack)
+      }
+    } else { // textNode 入栈 + 出栈
+      const node = createTextNode(tag, stack)
+      inStack(node, stack)
+      outStack(stack, root)
+    }
+  }
+  console.info('root', root)
+  return root
+}
+
+function createTextNode(tag) {
+  return {
+    nodeType: 'text',
+    innerText: tag
+  }
+}
+
+function createTagNode(tag) {
+  const pairResult = tag.match(new RegExp(extractValuedAttrMatchReg))// 提取属性
+  const tagMatch = tag.match(new RegExp(extractTagNameMatchReg))
+  if (!tagMatch) {
+    console.info(tag, tagMatch)
+  }
+  const node = { nodeType: 'tag', attributes: [], tagName: tagMatch && tagMatch[0], children: [], html: tag }
+
+  if (pairResult) {
+    for (const pair of pairResult) {
+      const pairs = new RegExp(extractKeyValueExecReg).exec(pair)
+      if (pairs[0].length > 0) {// 匹配成功
+        node.attributes.push({
+          name: pairs[1],
+          expression: pairs[3],
+        })
+      }
+    }
+  }
+  return node
+}
+
+
+function inStack(node, stack) {
+  const topNode = stack[stack.length - 1]
+  if (topNode) {// 设置父子关系
+    topNode.children.push(node)
+    node.parent = topNode
+  } else {
+    node.parent = null
+  }
+  stack.push(node)
+}
+
+function outStack(stack, root) {
+  const node = stack.pop()
+  if (stack.length === 0) {// 跟节点
+    root.push(node)
+  }
+}
+
+
+function formatUnclosedTag(html) {
+  const start = Date.now()
+  const result = html.replace(toCloseTagReplaceReg, '$1/>')
+  console.info('formatUnclosedTag costs:', (Date.now() - start))
   return result
 }
 
@@ -46,14 +158,35 @@ function formatUnclosedTag(html) {
  */
 function shakeChars(str = "") {
   let result = str.trim()
-  for (const reg of shakeTable) {
+  const start = Date.now()
+  for (const reg in shakeTable) {
     result = result.replace(new RegExp(reg, 'g'), shakeTable[reg])
   }
+  console.info('shakeChars costs:', (Date.now() - start))
   return result
 }
 
+let xx = 0
 
+/**
+ * 这个方法判断有问题，处理不了复杂的同名嵌套，比如：<a><a :key="a<b"><a>123</a><a/></a><a><b></b></a><c></c><d/></a><a></a>
+ * @param {*} html 
+ */
 function extractChildren(html) {
+  xx++
+  /**
+    * 规则字符串
+    *
+    * test unit:
+    *  '<b :value="a<2 && b>3" :key="item.id" v-for="(item,index) in items">{{a > b}}</b><input/><input/><span></span><d>123</d><c/><f/><e>123</e>'.split(/(<([a-zA-Z0-9]+)( [^`'" ]*=([`'"]).*\4)*(?:>?.*<\/\2>|\/>))/)
+          * 匹配 < XXX CCC = "DDD" > YYY</XXX > 或 < XXX />
+    * 注意：规则放到字符串里好多字符都加了转义
+    * $1: 匹配内容, $2: tagName, $3: 键值对字符串, $4: 引号 $5: innerHTML
+    */
+  const closedTagRegString = '(<([a-zA-Z0-9]+)( [^`\'" ]*=([`\'"]).*?\\4)*(?:>?(.*)<\\/\\2>|\\/>))'
+  const closedTagReg = new RegExp(closedTagRegString, 'g') // RegExp
+
+  const start = Date.now()
   const nodes = [] // 子DOM节点
   // 拿到第一个闭合标签的innerText
   const splitResult = html.split(closedTagReg)
@@ -75,18 +208,26 @@ function extractChildren(html) {
           break;
         }
         case 3: {
-          const attrPeriods = splitResult[i].split(' ')
-          const attributes = []
-          for (const period of attrPeriods) {
-            const pair = period.split('=')
-            attributes.push({ attr: pair[0], expression: pair[1].substring(1, pair[1].length - 1) })
+          if (splitResult[i]) {
+            const attrPeriods = splitResult[i].split(attributeSplitReg)
+            const attributes = []
+            let attribute
+            for (let i = 1; i < attrPeriods.length; i++) {
+              if (i % 2 === 1) {
+                attribute = { name: attrPeriods[i] }
+                attributes.push(attribute)
+              } else {
+                attribute.expression = attrPeriods[i].substring(0, attrPeriods[i].length - 1)
+              }
+            }
+            lastNode.attributes = attributes
           }
-          lastNode.attributes = attributes
           break;
         }
         case 5: {
-          const innerHTML = lastNode.innerHTML = splitResult[i]
-          if (innerHTML.length > 0) {
+          const innerHTML = splitResult[i]
+          if (innerHTML && innerHTML.length > 0) {
+            lastNode.innerHTML = innerHTML
             lastNode.children = extractChildren(innerHTML)
           }
           break;
@@ -94,103 +235,10 @@ function extractChildren(html) {
       }
     }
   }
+  if (xx === 1) {
+    console.info('no xx ' + xx + ' cost ', Date.now() - start)
+  }
   return nodes
 }
 
-function formatHTML(html) {
-  const result = []
-  if (typeof html === "string") {
-    const rowHTML = formatUnclosedTag(shakeChars(html))
-    let i = 0
-    const stack = []
-    const len = rowHTML.length
-    for (; i < len; i++) {
-      const c = rowHTML[i]
-      if (c === '<') {
-        if (rowHTML[i + 1] === '/') {// 标签闭合开始
-          if (stack.length === 0) {
-            console.info('error html')
-          }
-          const node = stack[stack.length - 1]
-          node.closeTagIndex = i // 结束标记位置 
-        } else {// 标签开始
-          const node = {
-            startIndex: i
-          }
-          if (stack.length === 0) {// 顶层节点
-            node.parent = null
-          } else {
-            const last = stack[stack.length - 1]
-            node.parent = last
-            if (last.children) {
-              last.children.push(node)
-            } else {// 第一次添加子节点
-              last.children = [node]
-            }
-          }
-          stack.push(node)
-        }
 
-      } else if (c === '>') {// 标签结尾
-        const node = stack[stack.length - 1]// 栈顶节点
-        const { closeTagIndex, startIndex, startHTML, tagName } = node
-
-        // <div> , <br /> , </div>  三种不同的处理
-        // <br /> , </div> 两种情况要将节点处理完毕
-
-
-        if (closeTagIndex > 0 || ['input', 'br', 'hr'].includes(tagName)) {// 标签闭合，叶子节点不一定加结束标签
-
-          if (closeTagIndex > 0) {// 解析innerHTML
-            node.innerHTML = rowHTML.substring(startIndex + startHTML.length, closeTagIndex)
-          }
-          node.html = rowHTML.substring(startIndex, i + 1)// 完整html代码
-          console.info(node.innerHTML, node.innerHTML)
-          const topNode = stack.pop()
-          if (stack.length === 0) {
-            result.push(topNode)
-          }
-
-        } else if (rowHTML[i - 1] === '/') { // 标签结束且闭合
-
-
-        } else {// 解析完开始标签，提取静态信息完毕
-          const endIndex = i + 1
-          node.endIndex = endIndex
-          node.startHTML = rowHTML.substring(node.startIndex, endIndex)
-          Object.assign(node, extractMsg(node.startHTML))
-        }
-      }
-    }
-  }
-  return result
-}
-
-function extractMsg(html) {
-  const matchResult = closedTagReg.exec(html)
-  const msg = {}
-  if (matchResult && matchResult.length > 1) {// 完整的标签
-    // ["<br test="123"/>", "br test="123"", index: 0, input: "<br test="123"/>", groups: undefined]
-
-    // 目前正则仅支持双引号
-    const periods = RegExp.$1.split(/(\s+.*=\".*\")/)
-    const len = periods.length
-    msg.tagName = periods[0]
-    msg.attributes = {}
-    for (let i = 1; i < len; i++) {
-      const period = periods[i]
-      if (period.length > 0) {
-        const attrMaps = period.split('=')// 属性键值对
-        if (attrMaps.length === 1 || attrMaps[1].length === 0) {// 键值对不完整，容错
-          console.info('键值对不完整，容错', period)
-        } else {
-          msg.attributes[attrMaps[0].trim()] = attrMaps[1]
-        }
-      }
-    }
-
-  } else {
-    console.info('提取错误', html, matchResult)
-  }
-  return msg
-}

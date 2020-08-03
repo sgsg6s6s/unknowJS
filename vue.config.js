@@ -6,6 +6,10 @@ const files = readFileInPath(notePath)
 // console.info(files)
 module.exports = {
   productionSourceMap: true,
+  // 开启调试
+  configureWebpack: {
+    devtool: 'source-map'
+  },
   devServer: {
     port: 8080,
     open: true,

@@ -34,30 +34,30 @@
   const template = `
       <div
        id="app">
-        <form id="applyForm">
-          <label for="nickname">Nickname:</label>
-          <input name="nickname" type="text" :value="formData.nickname"><br/>
-          <label for="age">Age:</label>
-          <input name="age" type="text" :value="formData.age"/><br />
-          <label for="isManager">Manager:</label>
-          <select name="isManager" v-model="formData.nickname">
-            <option v-for="(item,index) in managerOptions" 
-            :value="item.value">{{item.name > 0}}-{{item.value}}</option>
-          </select>
-          <label for="pet">Pet:</label>
-          <select name="pet" v-model="formData.nickname">
-            <option v-for="(item,index) in petOptions" :value="item.value">{{item.name}}</option>
-          </select>
-        </form>
-        <button class="commit-btn" @click="updateCommitMsg">Commit</button>
-        <header><h1>Reactive</h1></header>
-        <div class="reactive-msg" ref="reactiveMsg">{{JSON.stringify(formData)}}</div>
-        <header><h1>Commit msg</h1></header>
-        <div class="commit-msg" ref="commitMsg"></div>
+          <form id="applyForm">
+            <label for="nickname">Nickname:</label>
+            <input name="nickname" type="text" :value="formData.nickname"><br/>
+            <label for="age">Age:</label>
+            <input name="age" type="text" :value="formData.age"/><br />
+            <label for="isManager">Manager:</label>
+            <select name="isManager" v-model="formData.nickname">
+              <option v-for="(item,index) in managerOptions" 
+              :value="item.value">{{item.name > 0}}-{{item.value}}</option>
+            </select>
+            <label for="pet">Pet:</label>
+            <select name="pet" v-model="formData.nickname">
+              <option v-for="(item,index) in petOptions" :value="item.value">{{item.name}}</option>
+            </select>
+          </form>
+          <button class="commit-btn" @click="updateCommitMsg">Commit</button>
+          <header><h1>Reactive</h1></header>
+          <div class="reactive-msg" ref="reactiveMsg">{{JSON.stringify(formData)}}</div>
+          <header><h1>Commit msg</h1></header>
+          <div class="commit-msg" ref="commitMsg"></div>
       </div>
   `
 
-  console.info(extractChildren(template))
+  console.info(formatHTML(tianmao))
   const fragment = document.createDocumentFragment()
 
   repalceDoubleBrace()

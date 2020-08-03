@@ -12,6 +12,11 @@ export const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "unknowJS" */ '../views/UnknowJS.vue')
   },
   {
+    path: '/hookOrder',
+    name: 'Hook Order Show',
+    component: () => import(/* webpackChunkName: "tests" */ '../views/vueHookOrder.vue')
+  },
+  {
     path: '/api',
     name: 'JS Object API',
     component: () => import(/* webpackChunkName: "unknowJS" */ '../views/API.vue')

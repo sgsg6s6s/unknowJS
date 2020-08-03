@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title>各种监听</title>
+  </head>
+  <body onhashchange="hashListenedByBody" onload="bodyOnLoad">
+    <style>
+      iframe {
+        width: 32%;
+        height: 200px;
+        border: 1px solid yellowgreen;
+      }
+
+      img {
+        vertical-align: top;
+      }
+
+      footer {
+        height: 800px;
+      }
+    </style>
+    <header>
+      <nav>
+        <label for="url">Location:</label>
+        <p name="url" id="content"></p>
+        <a class="" href="#job" target="_self">跳转锚点</a>
+        <h1>URL 操作</h1>
+        <a class="append-hash" href="javascript:void(0);">Append Hash</a>
+        <a href="javascript:void(0);" onclick="window.history.back()">Back</a>
+        <a href="javascript:void(0);" onclick="window.history.forward()">Forward</a>
+
+        <h1>不刷新页面的跳转</h1>
+        <a class="" href="" target="left">跳转left</a>
+        <a class="" href="middle.html" target="middle">跳转middle</a>
+        <a class="" href="" target="right">跳转right</a>
+      </nav>
+    </header>
+    <script>
+      console.info('script content between dom')
+      console.info('document state:', document.readyState)
+    </script>
+    <section>
+      <p>
+        HTML 文档加载和解析过程中，document state 是 loading状态
+      </p>
+      <p>
+        当初始的 HTML 文档被完全加载和解析完成之后，document state 是 interactive 状态，同时
+        DOMContentLoaded 事件被触发，这些无需等待样式表、图像和子框架的完全加载。
+      </p>
+      <p>
+        HTML 文档被完全加载和解析完成，样式表、图像和子框架也完全加载后，document state 是 complete
+        状态，window onload 执行
+      </p>
+    </section>
+    <script src="between.js" type="text/javascript"></script>
+    <section>
+      <iframe name="left"></iframe>
+      <iframe name="middle"></iframe>
+      <iframe name="right"></iframe>
+    </section>
+    <footer>
+      <p><a name="job">惊不惊喜</a><img id="pic" src="" /></p>
+    </footer>
+    <script src="./index.js" type="text/javascript" charset="utf-8"></script>
+  </body>
+</html>
