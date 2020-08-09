@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE7" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/2.5.3/less.min.js"></script>
+    <style>
+      .container {
+        display: grid;
+        width: 500px;
+        height: 300px;
+        grid-template-columns: repeat(3, 50px);
+        grid-template-rows: repeat(5, minmax(50px, auto));
+        grid-auto-rows: minmax(50px, auto);
+        grid-gap: 10px;
+      }
+      .container .item {
+        background-color: lightblue;
+      }
+      .container .item:nth-child(even) {
+        background-color: lightcyan;
+      }
+      p {
+        margin: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>CSS3网格布局</h1>
+    <header>inline</header>
+    <section>
+      Foo
+      <div class="container">
+        <script>
+          const c = document.querySelector('.container')
+          let template = ''
+          for (let i = 1; i <= 15; i++) {
+            template += `<div class="item"><p>${'repeat '.repeat(Math.min(i, 5))}</p></div>`
+          }
+          c.innerHTML = template
+        </script>
+      </div>
+      Bar
+    </section>
+  </body>
+</html>
