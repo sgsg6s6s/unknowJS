@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>js和css的阻塞</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	
+    <style>
+      h1 {
+        color: red !important
+      }
+	  div {
+		outline:1px solid yellow;
+		border:1px solid yellow;
+	  }
+    </style>
+	<script>
+		console.info("window",window)
+		console.info("document",document)
+		console.info("in head ,document.body",document.body)
+	</script>
+  </head>
+  <body>
+ 
+	
+	<script>
+	  console.info("in body,document.body",document.body)
+	  
+	  	var start = Date.now()
+		  while(Date.now()-start<3000){
+		  
+		  }
+		  console.info('passed 3 seconds',document.readyState)
+	  
+	  console.log('first:',document.querySelectorAll('h1'))
+	  console.log('end:',document.querySelectorAll('.shig'))
+	  
+	  
+	  	var start = Date.now()
+		  while(Date.now()-start<3000){
+		  
+		  }
+		  console.info('passed another 3 seconds',document.readyState)
+	  
+	  function h () {
+        console.log(document.querySelectorAll('h1'),document.readyState)
+      }
+      setTimeout(h, 10)
+	  const div = document.createElement('div')
+	  div.innerText = '我是js动态添加的div'
+	  document.body.append(div)
+	  
+	document.addEventListener('DOMContentLoaded', function () {
+	  console.info('------------------')
+	  console.log('document addEventListener[DOMContentLoaded]');
+	  console.info('document state:', document.readyState)
+	  console.log('h1',document.querySelectorAll('h1'))
+	});
+    </script>
+	<h1>假设下面有很多dom元素</h1>
+	<h2>结论是：</h2>
+	<p>
+		1. 网页内多段script代码会按从上到下执行，他们属于同一个全局作用域
+		2. 遇到外部js，如果不加标识符，下载过程会阻塞后面js的执行，并且阻塞dom解析
+		3. 遇到link引用一个外部资源，会阻塞后面的script执行以及dom解析
+		4. 浏览器对多个资源并行下载的实现可能会不同，这个需要继续研究
+		5. dom解析和js代码执行是并行的，如果dom解析未全部完成，js取不到dom节点
+		6. js代码执行会阻塞后面的dom解析和渲染
+
+		
+	</p>
+
+	<div id="custom-bg" style="opacity: 0;"></div>
+  <div id="custom-bg-preview"></div>
+  <!-- Container for the OneGoogleBar HTML. -->
+  <div id="one-google" class="show-element"></div>
+
+  <div id="ntp-contents">
+    <div id="logo">
+      <!-- The logo that is displayed in the absence of a doodle. -->
+      <div id="logo-default" title="Google" class="show-logo"></div>
+      <!-- Logo displayed when theme prevents doodles. Doesn't fade. -->
+      <div id="logo-non-white" title="Google"></div>
+      <!-- A doodle, if any: its link and image. -->
+      <div id="logo-doodle">
+        <div id="logo-doodle-container">
+          <div id="logo-doodle-wrapper">
+            <button id="logo-doodle-button">
+              <img id="logo-doodle-image" tabindex="-1">
+            </button>
+          </div>
+        </div>
+        <iframe id="logo-doodle-iframe" scrolling="no"></iframe>
+      </div>
+    </div>
+
+    <div id="fakebox-container" hidden="">
+      <div id="fakebox">
+        <div class="search-icon"></div>
+        <div id="fakebox-text"></div>
+        <input id="fakebox-input" autocomplete="off" tabindex="-1" type="url" aria-hidden="true">
+        <div id="fakebox-cursor"></div>
+        <button id="fakebox-microphone" class="microphone-icon" hidden=""></button>
+      </div>
+    </div>
+
+    <div id="realbox-container">
+      <div id="realbox-input-wrapper">
+      
+        <input id="realbox" type="search" autocomplete="off" spellcheck="false" aria-live="polite" autofocus="" placeholder="在 Google 上搜索，或者输入一个网址">
+        <button id="realbox-microphone" class="microphone-icon" title="语音搜索"></button>
+        <div id="realbox-matches"></div>
+      </div>
+    </div>
+
+    <div id="user-content">
+      <!-- Search suggestions will be inserted here. -->
+      <div id="most-visited">
+        <!-- The container for the tiles. The MV iframe goes in here. -->
+      
+      </div>
+    </div>
+
+    <!-- Notification shown when the tiles are modified. -->
+    <div id="mv-notice-container">
+      <div id="mv-notice" class="notice-hide" role="alert">
+        <span id="mv-msg">已移除快捷方式</span>
+        <!-- Links in the notification. -->
+        <span id="mv-notice-links">
+          <span id="mv-undo" class="ripple" tabindex="0" role="button">撤消</span>
+          <span id="mv-restore" class="ripple" tabindex="0" role="button"></span>
+        </span>
+      </div>
+    </div>
+
+    <div id="attribution" style="display: none;"><div id="attribution-text">主题背景创建者：</div></div>
+
+    <div id="error-notice-container">
+      <div id="error-notice" class="notice-hide" role="alert">
+        <span id="error-notice-icon"></span>
+        <span id="error-notice-msg"></span>
+        <span id="error-notice-link" class="ripple" tabindex="0" role="button"></span>
+      </div>
+    </div>
+
+    <div id="edit-bg" tabindex="0" role="button" class="ep-enhanced" aria-label="自定义此页" title="自定义此页">
+      <div id="edit-bg-icon"></div>
+      <span id="edit-bg-text">自定义</span>
+    </div>
+
+    <div id="custom-bg-attr"></div>
+  </div>
+
+  <dialog div="" id="edit-bg-dialog">
+    <div id="edit-bg-menu">
+      <div id="edit-bg-title">自定义此页</div>
+      <div id="edit-bg-default-wallpapers" class="bg-option" tabindex="0">
+        <div class="bg-option-img"></div>
+        <div id="edit-bg-default-wallpapers-text" class="bg-option-text">Chrome 背景</div>
+      </div>
+      <div id="edit-bg-upload-image" class="bg-option" tabindex="0">
+        <div class="bg-option-img"></div>
+        <div id="edit-bg-upload-image-text" class="bg-option-text">上传图片</div>
+      </div>
+      <div id="edit-bg-divider"></div>
+      <div id="custom-links-restore-default" class="bg-option bg-option-disabled" tabindex="-1">
+        <div class="bg-option-img"></div>
+        <div id="custom-links-restore-default-text" class="bg-option-text">恢复默认快捷方式</div>
+      </div>
+      <div id="edit-bg-restore-default" class="bg-option bg-option-disabled" tabindex="-1">
+        <div class="bg-option-img"></div>
+        <div id="edit-bg-restore-default-text" class="bg-option-text">恢复默认背景</div>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="ddlsd">
+    <div id="ddlsd-title"></div>
+    <button id="ddlsd-close"></button>
+    <div id="ddlsd-content">
+      <button id="ddlsd-fbb" class="ddlsd-sbtn"></button>
+      <button id="ddlsd-twb" class="ddlsd-sbtn"></button>
+      <button id="ddlsd-emb" class="ddlsd-sbtn"></button>
+      <hr id="ddlsd-hr">
+      <div id="ddlsd-link">
+        <span id="ddlsd-text-ctr">
+          <input type="text" id="ddlsd-text" dir="ltr">
+        </span>
+        <button id="ddlsd-copy"></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="bg-sel-menu" class="customize-dialog">
+    <div id="bg-sel-title-bar">
+    <div id="bg-sel-back-circle" tabindex="0" role="button" aria-label="返回">
+      <div id="bg-sel-back"></div>
+    </div>
+    <div id="bg-sel-title"></div>
+    </div>
+    <div id="bg-sel-tiles" tabindex="0"></div>
+    <div id="bg-sel-footer">
+      <button id="bg-sel-footer-cancel" class="bg-sel-footer-button paper secondary ripple" tabindex="0" aria-label="取消">取消</button>
+      <button id="bg-sel-footer-done" class="bg-sel-footer-button paper primary ripple" tabindex="-1" aria-label="完成" disabled="">完成</button>
+    </div>
+  </dialog>
+
+  <dialog id="customization-menu" class="customize-dialog">
+    <div id="menu-nav-panel" role="tablist" aria-label="自定义此页">
+      <button id="backgrounds-button" class="menu-option" tabindex="0" role="tab" aria-controls="backgrounds-menu backgrounds-image-menu" aria-selected="true" aria-labelledby="backgrounds-menu-option" title="背景">
+        <div class="menu-option-icon-wrapper">
+          <div id="backgrounds-icon" class="menu-option-icon"></div>
+        </div>
+        <div id="backgrounds-menu-option" class="menu-option-label">
+          背景
+        </div>
+      </button>
+      <button id="shortcuts-button" class="menu-option" tabindex="0" role="tab" aria-controls="shortcuts-menu" aria-selected="false" aria-labelledby="shortcuts-menu-option" title="快捷键">
+        <div class="menu-option-icon-wrapper">
+          <div id="shortcuts-icon" class="menu-option-icon"></div>
+        </div>
+        <div id="shortcuts-menu-option" class="menu-option-label">
+          快捷键
+        </div>
+      </button>
+      <button id="colors-button" class="menu-option" tabindex="0" role="tab" aria-controls="colors-menu" aria-selected="false" aria-labelledby="colors-menu-option" title="颜色和主题背景">
+        <div class="menu-option-icon-wrapper">
+          <div id="colors-icon" class="menu-option-icon"></div>
+        </div>
+        <div id="colors-menu-option" class="menu-option-label">
+          颜色和主题背景
+        </div>
+      </button>
+    </div>
+    <div id="menu-contents">
+      <div id="menu-header">
+        <div id="menu-back-circle" tabindex="0" role="button" aria-label="返回" title="返回">
+          <div id="menu-back"></div>
+        </div>
+        <div id="menu-title">自定义此页</div>
+        <div id="refresh-daily-wrapper">
+          <div id="refresh-toggle-wrapper" title="每日刷新">
+            <label class="switch">
+              <input id="refresh-daily-toggle" type="checkbox" aria-labelledby="refresh-text">
+              <span class="toggle">
+                <div class="knob"></div>
+                <div class="highlight"></div>
+              </span>
+            </label>
+          </div>
+          <div id="refresh-text">每日刷新</div>
+        </div>
+      </div>
+      <div id="backgrounds-menu" class="menu-panel" tabindex="0" role="tabpanel" aria-label="背景">
+        <div id="backgrounds-upload" class="bg-sel-tile-bg">
+          <div id="backgrounds-upload-icon" class="bg-sel-tile" tabindex="-1" role="button" aria-label="从设备上传" aria-pressed="false" title="从设备上传">
+            <div id="backgrounds-upload-arrow"></div>
+            <div id="backgrounds-upload-text">从设备上传</div>
+          </div>
+        </div>
+        <div id="backgrounds-default" class="bg-sel-tile-bg">
+          <div id="backgrounds-default-icon" class="bg-sel-tile" tabindex="-1" role="button" aria-label="无背景图片" title="无背景图片" aria-pressed="false">
+            <div class="mini-page">
+              <div class="mini-header-colorful"></div>
+              <div class="mini-shortcuts"></div>
+            </div>
+          </div>
+          <div class="bg-sel-tile-title">无背景图片</div>
+        </div>
+      </div>
+      <div id="backgrounds-image-menu" class="menu-panel" tabindex="0" role="tabpanel" aria-label="背景"></div>
+      <div id="backgrounds-disabled-menu" class="menu-panel" tabindex="0" role="tabpanel" aria-label="背景">
+        <div id="backgrounds-disabled-wrapper">
+          <div id="backgrounds-disabled-icon"></div>
+          <div id="backgrounds-disabled-title">
+            您的管理员已关闭自定义背景
+          </div>
+        </div>
+      </div>
+      <div id="shortcuts-menu" class="menu-panel" tabindex="0" role="tabpanel" aria-label="快捷键">
+        <div id="sh-options">
+          <div class="sh-option">
+            <div id="sh-option-cl" class="sh-option-image" tabindex="-1" role="button" aria-pressed="false" aria-labelledby="sh-option-cl-title" title="我的快捷方式">
+              <div class="sh-option-icon"></div>
+              <div class="sh-option-mini">
+                <div class="mini-page">
+                  <div class="mini-header"></div>
+                  <div class="mini-shortcuts"></div>
+                </div>
+              </div>
+            </div>
+            <div id="sh-option-cl-title" class="sh-option-title">
+              我的快捷方式
+            </div>
+            快捷方式由您自己挑选
+          </div>
+          <div class="sh-option">
+            <div id="sh-option-mv" class="sh-option-image" tabindex="-1" role="button" aria-pressed="false" aria-labelledby="sh-option-mv-title" title="最常访问的网站">
+              <div class="sh-option-icon"></div>
+              <div class="sh-option-mini">
+                <div class="mini-page">
+                  <div class="mini-header"></div>
+                  <div class="mini-shortcuts"></div>
+                </div>
+              </div>
+            </div>
+            <div id="sh-option-mv-title" class="sh-option-title">
+              最常访问的网站
+            </div>
+            系统根据您经常访问的网站提供快捷方式建议
+          </div>
+        </div>
+        <div id="sh-hide">
+          <div id="sh-hide-icon"></div>
+          <div>
+            <div id="sh-hide-title">隐藏快捷方式</div>
+            不在本页上显示快捷方式
+          </div>
+          <div id="sh-hide-toggle-wrapper" title="隐藏快捷方式">
+            <label class="switch">
+              <input id="sh-hide-toggle" type="checkbox" tabindex="-1" aria-labelledby="sh-hide-title">
+              <span class="toggle">
+                <div class="knob"></div>
+                <div class="highlight"></div>
+              </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div id="colors-menu" class="menu-panel" tabindex="0" role="tabpanel" aria-label="颜色和主题背景">
+        <div id="colors-theme" tabindex="0">
+            <div id="colors-theme-icon"></div>
+            <div id="colors-theme-info">
+              <div id="colors-theme-name"></div>
+              您已安装的当前主题背景
+            </div>
+            <a id="colors-theme-link" target="_blank">
+              <div id="colors-theme-link-icon"> </div>
+            </a>
+            <button id="colors-theme-uninstall" class="paper secondary">
+              卸载
+            </button>
+        </div>
+        <div id="color-picker-container" class="bg-sel-tile-bg">
+          <div id="color-picker-tile" class="bg-sel-tile" tabindex="-1" aria-label="选择颜色" title="选择颜色" role="button" aria-pressed="false">
+            <div id="left-semicircle"></div>
+            <div id="color-picker-icon"></div>
+            <input id="color-picker" type="color" style="display:none">
+            
+          </div>
+        </div>
+        <div id="colors-default" class="bg-sel-tile-bg">
+          <div id="colors-default-icon" class="bg-sel-tile" tabindex="-1" aria-label="默认" title="默认" role="button" aria-pressed="false">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="menu-footer">
+      <button id="menu-cancel" class="bg-sel-footer-button paper secondary ripple" title="取消">取消</button>
+      <button id="menu-done" class="bg-sel-footer-button paper primary ripple" title="完成">完成</button>
+    </div>
+  </dialog>
+
+  <dialog id="voice-overlay-dialog" class="overlay-dialog">
+    <div id="voice-overlay" class="overlay-hidden">
+      <button id="voice-close-button" class="close-button" title="关闭" aria-label="关闭">×</button>
+      <div id="voice-outer" class="outer">
+        <div class="inner-container">
+          <div id="voice-button-container" class="button-container">
+            <!-- The audio level animation. -->
+            <span id="voice-level" class="level"></span>
+            <!-- The microphone button. -->
+            <span id="voice-button" class="button">
+              <!-- The microphone icon (in CSS). -->
+              <div class="microphone">
+                <span class="receiver"></span>
+                <div class="wrapper">
+                  <span class="stem"></span>
+                  <span class="shell"></span>
+                </div>
+              </div>
+            </span>
+          </div>
+          <div id="text-container" aria-live="polite">
+            <!-- Low confidence text underneath high confidence text. -->
+            <span id="voice-text-i" class="voice-text"></span>
+            <!-- High confidence text on top of low confidence text. -->
+            <span id="voice-text-f" class="voice-text"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+  <div class="shig"></div>
+	
+	<script>
+		var start = Date.now()
+		  while(Date.now()-start<10000){
+		  
+		  }
+		  console.info('passed many seconds')
+	</script>
+  </body>
+</html>

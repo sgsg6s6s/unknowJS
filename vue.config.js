@@ -6,10 +6,7 @@ const files = readFileInPath(notePath)
 // console.info(files)
 module.exports = {
   productionSourceMap: true,
-  // 开启调试
-  configureWebpack: {
-    devtool: 'source-map'
-  },
+  publicPath: '/',
   devServer: {
     port: 8080,
     open: true,
@@ -30,6 +27,10 @@ module.exports = {
         target: 'http://localhost:9000',
         changeOrigin: true,
       },
+      '^/api/test': {
+        target: 'http://localhost:9000',
+        changeOrigin: true,
+      },
     }
   },
   configureWebpack: config => {
@@ -38,6 +39,7 @@ module.exports = {
       // 为生产环境修改配置...
     } else {
       // 为开发环境修改配置...
+      config.devtool = 'source-map'
     }
     config.plugins.push(
       new MonacoWebpackPlugin({

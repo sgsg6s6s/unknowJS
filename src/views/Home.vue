@@ -1,33 +1,25 @@
 <template>
   <div class="home">
     <form>
-      <input
-        ref="age-input"
-        name="age"
-        v-model="age"
-      >
-      <input
-        ref="age-job"
-        name="job"
-        :value="job"
-      >
+      <input ref="age-input"
+             name="age"
+             v-model="age">
+      <input ref="age-job"
+             name="job"
+             :value="job">
       <p @click="pushToArray">Append:{{joinArray}}</p>
     </form>
 
     <p @click="replaceArray">replace</p>
     <p @click="spliceArray">splice</p>
-    <div
-      v-for="(v,index) in arr"
-      :key="index"
-    >{{v}}</div>
+    <div v-for="(v,index) in arr"
+         :key="index">{{v}}</div>
 
     <slot name="header"></slot>
     <slot name="footer"></slot>
-    <VueLinks
-      ref="vue-links"
-      attr1="test1"
-      msg="Welcome to Your Vue.js App"
-    >
+    <VueLinks ref="vue-links"
+              attr1="test1"
+              msg="Welcome to Your Vue.js App">
       <template v-slot:default>
         no image
       </template>
@@ -44,9 +36,13 @@ import VueLinks from '@/components/VueLinks.vue'
 
 export default {
   name: 'Home',
-  data: () => {
+  data: function () {
     return {
-      arr: [1, 2, 3],
+      arr: [
+        1,
+        2,
+        3
+      ],
       job: 'coder',
       age: 18
     }
@@ -70,20 +66,19 @@ export default {
   components: {
     VueLinks
   },
-  beforeCreate() {
-    debugger
+  beforeCreate () {
+
     console.info('Home.vue is ', this)
   },
-  created() {
-    debugger
+  created () {
+
     console.info('Home.vue is ', this)
   },
-  beforeMount() {
-    debugger
+  beforeMount () {
+
     console.info('Home.vue is ', this)
   },
   mounted: function () {
-    debugger
     console.info('Home.vue is ', this)
   },
   methods: {
